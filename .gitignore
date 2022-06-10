@@ -1,3 +1,6 @@
+#ignore sensitive creds
+connection.properties
+
 # Compiled class file
 *.class
 
