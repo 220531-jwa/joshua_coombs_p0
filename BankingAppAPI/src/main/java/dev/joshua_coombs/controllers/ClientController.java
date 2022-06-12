@@ -11,7 +11,7 @@ public class ClientController {
 	private static List<Client> clients = clientService.getAllClients();
 	public static void getAllClients(Context ctx) {
 		ctx.status(200);
-		List<Client> clients = clientService.getAllClients();
+		clients = clientService.getAllClients();
 		ctx.json(clients);
 	}
 	
@@ -24,18 +24,18 @@ public class ClientController {
 	
 	public static void getClientById(Context ctx) {
 		int id = Integer.parseInt(ctx.pathParam("id"));
-		for (Client c : clients) {
-			if (c.getId() == id) {
-				Client client = clientService.getClientById(id);
-				ctx.status(200);
-				ctx.json(client);
-			} else {
-				ctx.status(404);
-			}
+		Client c = null;
+		try {
+			c = clientService.getClientById(id);
+		} catch (Exception e) {
+			ctx.status(404);
+			e.printStackTrace();
 		}
-		
+		ctx.status(200);
+		ctx.json(c);
 	}
 	
+	/*
 	public static void createClientById(Context ctx) {
 		int id = Integer.parseInt(ctx.pathParam("id"));
 		for (Client c : clients) {
@@ -48,8 +48,12 @@ public class ClientController {
 			}
 		}
 	}
+	*/
 	
 	public static void deleteClientById(Context ctx) {
+		int id = Integer.parseInt(ctx.pathParam("id"));
+		clientService.deleteClientById(id);
+		/*(
 		int id = Integer.parseInt(ctx.pathParam("id"));
 		Client c = clientService.getClientById(id);
 		if (c.getId() == id) {
@@ -59,9 +63,12 @@ public class ClientController {
 		} else {
 			ctx.status(404);
 		}
+		*/
 	}
 	
 	public static void updateClientById(Context ctx) {
-		
+		Client changedClient = ctx.bodyAsClass(Client.class);
+		System.out.println("updateClient -=" + changedClient);
+		clientService.updateClient(changedClient);
 	}
 }

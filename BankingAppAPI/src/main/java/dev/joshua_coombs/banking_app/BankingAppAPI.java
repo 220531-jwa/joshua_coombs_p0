@@ -1,20 +1,15 @@
 package dev.joshua_coombs.banking_app;
 
-import java.util.List;
+//import java.util.List;
 
-import dev.joshua_coombs.models.Client;
-import dev.joshua_coombs.repositories.ClientDAO;
-import dev.joshua_coombs.services.ClientService;
 import dev.joshua_coombs.controllers.AccountController;
 import dev.joshua_coombs.controllers.ClientController;
 import io.javalin.Javalin;
 import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class BankingAppAPI {
-	private static ClientService clientService;
 	
 	public static void main(String[] args) {
-		clientService = new ClientService();
 		Javalin app = Javalin.create();
 		app.start();
 		
@@ -24,22 +19,22 @@ public class BankingAppAPI {
 				post(ClientController::createClient);
 				path("/{id}", () -> {
 					get(ClientController::getClientById);
-					post(ClientController::createClientById);
+					//post(ClientController::createClientById);
 					put(ClientController::updateClientById); //implement
 					delete(ClientController::deleteClientById);
 					path("/accounts", () -> {
-						post(AccountController::createNewAccount); //implement
+						post(AccountController::createAccount); //implement
 						//creates a new account for client with the id of 5 return a 201 status code
-						get(AccountController::getAllAccounts); //implement
+						get(AccountController::getAllAccountsByClientId); //implement
 						//get all accounts for client 7 return 404 if no client exists
 						path("/{id}", () -> {
-							get(AccountController::getSpecificAccount); //implement
+							get(AccountController::getSpecificAccountByClientId); //implement
 							//get account 4 for client 9 return 404 if no account or client exists
-							post(AccountController::createAccountById); //implement
+							post(AccountController::createAccount); //implement
 							//
-							put(AccountController::updateAccountById); //implement
+							put(AccountController::updateAccount); //implement
 							//update account with the id 3 for client 10 return 404 if no account or client exists
-							delete(AccountController::deleteAccountById);
+							delete(AccountController::deleteAccount);
 							//delete account 6 for client 15 return 404 if no account or client exists
 							path("/transfer/{id}", () -> {
 								

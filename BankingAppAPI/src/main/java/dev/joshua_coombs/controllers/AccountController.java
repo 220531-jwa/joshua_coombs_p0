@@ -6,26 +6,22 @@ import io.javalin.http.Context;
 public class AccountController {
 	private static ClientService clientService = new ClientService();
 	
-	public static void createNewAccount(Context ctx) {
+	public static void createAccount(Context ctx) {
 		
 	}
 	
-	public static void createAccountById(Context ctx) {
+	public static void getAllAccountsByClientId(Context ctx) {
 		
 	}
 	
-	public static void getAllAccounts(Context ctx) {
+	public static void getSpecificAccountByClientId(Context ctx) {
 		
 	}
 	
-	public static void getSpecificAccount(Context ctx) {
+	public static void updateAccount(Context ctx) {
 		
 	}
-	
-	public static void updateAccountById(Context ctx) {
-		
-	}
-	public static void deleteAccountById(Context ctx) {
+	public static void deleteAccount(Context ctx) {
 		
 	}
 }

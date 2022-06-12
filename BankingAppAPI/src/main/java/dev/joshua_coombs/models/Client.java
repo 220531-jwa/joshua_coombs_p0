@@ -3,23 +3,18 @@ package dev.joshua_coombs.models;
 
 public class Client {
 	private int id;
-	private String username;
-	private String password;
+	private String firstName;
+	private String lastName;
 	
 	public Client() {
 		super();
 	}
 	
-	public Client(int id) {
+	public Client(int id, String firstName, String lastName) {
 		super();
 		this.id = id;
-	}
-	
-	public Client(int id, String username, String password) {
-		super();
-		this.id = id;
-		this.username = username;
-		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
 	}
 	
 	public int getId() {
@@ -30,24 +25,24 @@ public class Client {
 		this.id = id;
 	}
 	
-	public String getUsername() {
-		return username;
-	}
-	
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
-	public String getPassword() {
-		return password;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
-	
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
 	@Override
 	public String toString() {
-		return "Client [id=" + id + ", username=" + username + "]";
+		return "Client [id=" + id +  ", first_name=" + firstName + ", last_name=" + lastName + "]";
 	}
 }

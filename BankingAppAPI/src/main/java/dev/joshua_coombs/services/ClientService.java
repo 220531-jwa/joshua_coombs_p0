@@ -13,20 +13,30 @@ public class ClientService {
 		return newClient;
 	}
 	
+	/*
 	public Client createClientWithId(int n) {
 		Client newClient = clientDao.createClientById(n);
 		return newClient;
 	}
+	*/
 	
 	public List<Client> getAllClients() {
 		return clientDao.getAllClients();
 	}
 	
-	public Client getClientById(int id) {
-		return clientDao.getClientById(id);
+	public Client getClientById(int id) throws Exception {
+		Client c = clientDao.getClientById(id);
+		if (c == null) {
+			throw new Exception("Client not found");
+		}
+		return c;
 	}
 	
 	public void deleteClientById(int id) {
 		clientDao.deleteClientById(id);
+	}
+	
+	public void updateClient(Client changedClient) {
+		clientDao.updateClient(changedClient);
 	}
 }

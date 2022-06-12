@@ -1,52 +1,58 @@
 package dev.joshua_coombs.models;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Account {
+	private int clientId;
 	private int accountNumber;
-	private Map<Integer, Integer> accounts = new HashMap<>();
+	private int checkingAmount;
+	private int savingsAmount;
 	
 	public Account() {
 		super();
 	}
 	
-	public Account(Map<Integer, Integer> accounts) {
-		this.accounts = accounts;
+	public Account(int accountNumber, int clientId, int checkingAmount, int savingsAmount) {
+		super();
+		this.accountNumber = accountNumber;
+		this.clientId = clientId;
+		this.checkingAmount = checkingAmount;
+		this.savingsAmount = savingsAmount;
 	}
 	
-	public Map<Integer, Integer> getAllAccounts() {
-		return accounts;
+	public int getClientId() {
+		return clientId;
 	}
-	
-	public int getSpecificAccount(int n) {
-		for (int key : accounts.keySet()) {
-			if (key == n) {
-				return key;
-			}
-		}
-		return 0;
+
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
 	}
-	
-	public int getSpecificAccountBalance(int n) {
-		return accounts.get(n);
+
+	public int getAccountNumber() {
+		return accountNumber;
 	}
-	
-	public void setAccounts(Map<Integer, Integer> accounts) {
-		this.accounts = accounts;
+
+	public void setAccountNumber(int accountNumber) {
+		this.accountNumber = accountNumber;
 	}
-	
-	public void setSpecificAccountBalance(int n, int a) {
-		int newAmount = accounts.get(n);
-		newAmount = a;
+
+	public int getCheckingAmount() {
+		return checkingAmount;
+	}
+
+	public void setCheckingAmount(int checkingAmount) {
+		this.checkingAmount = checkingAmount;
+	}
+
+	public int getSavingsAmount() {
+		return savingsAmount;
+	}
+
+	public void setSavingsAmount(int savingsAmount) {
+		this.savingsAmount = savingsAmount;
 	}
 	
 	@Override
 	public String toString() {
-		String result = "Accounts ";
-		for (Integer n : accounts.keySet()) {
-			result += "[accountNumber=" + n + "balance=" + getSpecificAccountBalance(n) + "]";
-		}
-		return result;
+		return "[account_number=" + accountNumber  + ", client_id=" + clientId + 
+				", checking=" + checkingAmount + ", savings=" + savingsAmount + "]";
 	}
 }
