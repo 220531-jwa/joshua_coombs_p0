@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import dev.joshua_coombs.models.Account;
 import dev.joshua_coombs.models.ClientAccountLeftJoin;
@@ -93,33 +91,18 @@ public class AccountDAO {
 	}
 	
 	public boolean updateAccount(Account changeAccount) {
-		String sqlInitial = "update bankingapp.accounts set checking = ?, savings = ?"
+		String sql = "update bankingapp.accounts set checking = ?, savings = ?"
 				+ " where account_number = ?"
 				+ " and client_id = ?";
-		Account a = null;
-		try (Connection connInitial = cu.getConnection()) {
-			PreparedStatement psInitial = connInitial.prepareStatement(sqlInitial);
-			psInitial.setInt(1, changeAccount.getCheckingAmount());
-			psInitial.setInt(2, changeAccount.getSavingsAmount());
-			psInitial.setInt(3, changeAccount.getAccountNumber());
-			psInitial.setInt(4, changeAccount.getClientId());
-			int updatedInitial = psInitial.executeUpdate();
-			if (updatedInitial != 0) {
-				String sqlSubsequent = "select * from bankingapp.clients c"
-						+ " left join bankingapp.accounts a"
-						+ " on c.id = a.client_id"
-						+ " where c.id = ? and a.account_number = ?";
-				try (Connection connSubsequent = cu.getConnection()) {
-					PreparedStatement psSubsequent = connSubsequent.prepareStatement(sqlSubsequent);
-					psSubsequent.setInt(1, changeAccount.getClientId());
-					psSubsequent.setInt(2, changeAccount.getAccountNumber());
-					int updatedSubsequent = psSubsequent.executeUpdate();
-					if (updatedSubsequent != 0) {
-						return true;
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+		try (Connection conn = cu.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, changeAccount.getCheckingAmount());
+			ps.setInt(2, changeAccount.getSavingsAmount());
+			ps.setInt(3, changeAccount.getAccountNumber());
+			ps.setInt(4, changeAccount.getClientId());
+			int updatedAccount = ps.executeUpdate();
+			if (updatedAccount != 0) {
+				return true;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -146,14 +129,14 @@ public class AccountDAO {
 	}
 	
 	public void withdraw() {
-		String sql = "";
+		//String sql = "";
 	}
 	
 	public void deposit() {
-		String sql = "";
+		//String sql = "";
 	}
 	
 	public void transfer() {
-		String sql = "";
+		//String sql = "";
 	}
 }
