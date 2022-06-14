@@ -23,7 +23,6 @@ public class ClientController {
 	}
 	
 	public static void getAllClients(Context ctx) {
-		//List<Client> clients = clientService.getAllClients();
 		if (clients.size() > 0) {
 			ctx.status(200);
 			ctx.json(clients);

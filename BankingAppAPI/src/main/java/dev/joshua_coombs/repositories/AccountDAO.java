@@ -46,7 +46,6 @@ public class AccountDAO {
 			ps.setInt(1, clientId);
 			ResultSet rs = ps.executeQuery();
 			
-			//if may increment before
 			while (rs.next()) {
 				joined.add(new ClientAccountLeftJoin(
 						rs.getInt("id"),

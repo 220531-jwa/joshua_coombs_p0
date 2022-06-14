@@ -53,25 +53,6 @@ public class AccountController {
 		}
 		ctx.status(200);
 		ctx.json(verifyAccount);
-		/*
-		try {
-			Client verifyId = clientService.getClientById(clientId);
-			if (verifyId.getId() == clientId) {
-				ClientAccountLeftJoin verifyAccount = accountService.getSpecificAccountByClientId(clientId, accountNumber);
-				if (verifyAccount.getAccountNumber() == accountNumber) {
-					verifyAccount = accountService.getSpecificAccountByClientId(clientId, accountNumber);
-					ctx.status(200);
-					ctx.json(verifyAccount);
-				} else {
-					ctx.status(404);
-				}
-			} else {
-				ctx.status(404);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		*/
 	}
 	
 	public static void updateAccount(Context ctx) {
