@@ -11,18 +11,56 @@ import dev.joshua_coombs.models.Client;
 import dev.joshua_coombs.utils.ConnectionUtil;
 
 public class ClientDAO {
-	//private List<Client> clients = BankDB.clients;
 	private static ConnectionUtil cu = ConnectionUtil.getConnectionUtil();
 	
 	public Client createClient(Client c) {
-		String sql = "insert into clients values (default, ?, ?) returning *";
+		String sql = "insert into bankingapp.clients values (default, ?, ?) returning *";
 		try (Connection conn = cu.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, c.getFirstName());
 			ps.setString(2, c.getLastName());
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				return new Client(
+				c.setID(rs.getInt("id"));
+				c.setFirstName(rs.getString("first_name"));
+				c.setLastName(rs.getString("last_name"));
+			} else {
+				c = null;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return c;
+	}
+	
+	public List<Client> getAllClients() {
+		List<Client> clients = new ArrayList<>();
+		String sql = "select * from bankingapp.clients";
+		try (Connection conn = cu.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				clients.add(new Client(
+						rs.getInt("id"),
+						rs.getString("first_name"),
+						rs.getString("last_name")));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return clients;
+	}
+	
+	public Client getClientById(int id) {
+		String sql = "select * from bankingapp.clients where id = ?";
+		Client c = null;
+		try (Connection conn = cu.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				c = new Client(
 						rs.getInt("id"),
 						rs.getString("first_name"),
 						rs.getString("last_name"));
@@ -30,77 +68,40 @@ public class ClientDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return c;
 	}
 	
-	/*
-	public Client createClientById(int id) {
-		Client client = new Client(id);
-		return client;
-	}
-	*/
-	
-	public List<Client> getAllClients() {
-		List<Client> clients = new ArrayList<>();
-		String sql = "select * from clients";
-		try (Connection conn = cu.getConnection()) {
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				int id = rs.getInt("id");
-				String firstName = rs.getString("first_name");
-				String lastName = rs.getString("last_name");
-				Client c = new Client(id, firstName, lastName);
-				clients.add(c);
-			}
-			return clients;
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public Client getClientById(int id) {
-		String sql = "select * from clients where id = ?";
-		try (Connection conn = cu.getConnection()) {
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setInt(1, id);
-			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
-				Client c = new Client(
-						rs.getInt(id),
-						rs.getString("first_name"),
-						rs.getString("last_name"));
-				return c;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public void updateClient (Client changeClient) {
-		String sql = "update clients set first_name = ?, last_name = ? where id = ?";
+	public boolean updateClientById (Client changeClient) {
+		String sql = "update bankingapp.clients set (first_name, last_name)"
+				+ " = (?, ?) where id = ?";
 		try (Connection conn = cu.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, changeClient.getFirstName());
 			ps.setString(2, changeClient.getLastName());
 			ps.setInt(3, changeClient.getId());
-			ps.executeUpdate();
+			int updated = ps.executeUpdate();
+			if (updated != 0) {
+				return true;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
 	
-	public void deleteClientById(int id) {
-		String sql = "delete from clients where id = ?";
+	public boolean deleteClientById(int id) {
+		String sql = "delete from bankingapp.clients where id = ?";
+		boolean deletedClient = false;
 		try (Connection conn = cu.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, id);
-			ps.execute();
+			int ifDeleted = ps.executeUpdate();
+			if (ifDeleted != 0) {
+				deletedClient = true;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return deletedClient;
 	}
 }

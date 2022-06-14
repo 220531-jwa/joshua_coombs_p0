@@ -9,16 +9,8 @@ public class ClientService {
 	private static ClientDAO clientDao = new ClientDAO();
 	
 	public Client createClient(Client c) {
-		Client newClient = clientDao.createClient(c);
-		return newClient;
+		return clientDao.createClient(c);
 	}
-	
-	/*
-	public Client createClientWithId(int n) {
-		Client newClient = clientDao.createClientById(n);
-		return newClient;
-	}
-	*/
 	
 	public List<Client> getAllClients() {
 		return clientDao.getAllClients();
@@ -32,11 +24,11 @@ public class ClientService {
 		return c;
 	}
 	
-	public void deleteClientById(int id) {
-		clientDao.deleteClientById(id);
+	public boolean deleteClientById(int id) {
+		return clientDao.deleteClientById(id);
 	}
 	
-	public void updateClient(Client changedClient) {
-		clientDao.updateClient(changedClient);
+	public boolean updateClient(Client changedClient) {
+		return clientDao.updateClientById(changedClient);
 	}
 }

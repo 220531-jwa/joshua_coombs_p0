@@ -15,34 +15,36 @@ public class BankingAppAPI {
 		
 		app.routes(() -> {
 			path("/clients", () -> {
-				get(ClientController::getAllClients);
-				post(ClientController::createClient);
+				get(ClientController::getAllClients); //works
+				post(ClientController::createClient); //works
 				path("/{id}", () -> {
-					get(ClientController::getClientById);
-					//post(ClientController::createClientById);
-					put(ClientController::updateClientById); //implement
-					delete(ClientController::deleteClientById);
+					get(ClientController::getClientById); //works
+					put(ClientController::updateClientById); //works
+					delete(ClientController::deleteClientById); //works
 					path("/accounts", () -> {
-						post(AccountController::createAccount); //implement
+						post(AccountController::createAccount); 
 						//creates a new account for client with the id of 5 return a 201 status code
 						get(AccountController::getAllAccountsByClientId); //implement
 						//get all accounts for client 7 return 404 if no client exists
-						path("/{id}", () -> {
+						path("/{account_number}", () -> {
 							get(AccountController::getSpecificAccountByClientId); //implement
 							//get account 4 for client 9 return 404 if no account or client exists
-							post(AccountController::createAccount); //implement
-							//
 							put(AccountController::updateAccount); //implement
 							//update account with the id 3 for client 10 return 404 if no account or client exists
 							delete(AccountController::deleteAccount);
 							//delete account 6 for client 15 return 404 if no account or client exists
-							path("/transfer/{id}", () -> {
+							path("/transfer/{other_account}", () -> {
 								
 							});
 						});
 					});
 				});
 			});
+		});
+		
+		app.exception(Exception.class, (e, ctx) -> {
+			ctx.status(404);
+			ctx.result("<h1>User not found</h1>");
 		});
 		
 		app.get("/clients/7/accounts/accounts?amountLessThan=2000&amountGreaterThan400", ctx -> {

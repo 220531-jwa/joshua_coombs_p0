@@ -8,13 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.joshua_coombs.models.Account;
+import dev.joshua_coombs.models.ClientAccountLeftJoin;
 import dev.joshua_coombs.utils.ConnectionUtil;
 
 public class AccountDAO {
 	private static ConnectionUtil cu = ConnectionUtil.getConnectionUtil();
 	
 	public Account createAccount (Account a) {
-		String sql = "insert into accounts values (default, ?, ?, ?) returning *";
+		String sql = "insert into bankingapp.accounts values (default, ?, ?, ?) returning *";
 		try (Connection conn = cu.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, a.getClientId());
@@ -23,7 +24,34 @@ public class AccountDAO {
 			ResultSet rs = ps.executeQuery();
 			
 			if (rs.next()) {
-				return new Account(
+				a.setAccountNumber(rs.getInt("account_number"));
+				a.setClientId(rs.getInt("client_id"));
+				a.setCheckingAmount(rs.getInt("checking"));
+				a.setSavingsAmount(rs.getInt("savings"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return a;
+	}
+	
+	public ClientAccountLeftJoin getAllAccountsByClientId(int clientId) {
+		String sql = "select * from bankingapp.clients c"
+				+ " left join bankingapp.accounts a"
+				+ " on c.id = a.client_id"
+				+ " where c.id = ?";
+		ClientAccountLeftJoin joined = null;
+		try (Connection conn = cu.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, clientId);
+			ResultSet rs = ps.executeQuery();
+			
+			//if may increment before
+			if (rs.next()) {
+				joined = new ClientAccountLeftJoin(
+						rs.getInt("id"),
+						rs.getString("first_name"),
+						rs.getString("last_name"),
 						rs.getInt("account_number"),
 						rs.getInt("client_id"),
 						rs.getInt("checking"),
@@ -32,35 +60,15 @@ public class AccountDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return joined;
 	}
 	
-	public List<Account> getAllAccountsByClientId(int clientIdParam) {
-		List<Account> accounts = new ArrayList<>();
-		String sql = "select * from accounts with client_id = ?";
-		try (Connection conn = cu.getConnection()) {
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setInt(1, clientIdParam);
-			ResultSet rs = ps.executeQuery();
-			
-			while (rs.next()) {
-				int accountNumber = rs.getInt("account_number");
-				int clientId = rs.getInt("client_id");
-				int checkingAmount = rs.getInt("checking");
-				int savingsAmount = rs.getInt("savings");
-				Account a = new Account(accountNumber, clientId, checkingAmount, savingsAmount);
-				accounts.add(a);
-			}
-			return accounts;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public Account getSpecificAccountByClientId(int accountNumber, int clientId) {
-		String sql = "select from accounts where client_id = ? "
-				+ "and account_number = ?";
+	public ClientAccountLeftJoin getSpecificAccountByClientId(int clientId, int accountNumber) {
+		String sql = "select * from bankingapp.clients c"
+				+ " left join bankingapp.accounts a"
+				+ " on c.id = a.client_id"
+				+ " where c.id = ? and a.account_number = ?";
+		ClientAccountLeftJoin joined = null;
 		try (Connection conn = cu.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, clientId);
@@ -69,7 +77,10 @@ public class AccountDAO {
 			ResultSet rs = ps.executeQuery();
 			
 			if (rs.next()) {
-				return new Account(
+				joined = new ClientAccountLeftJoin(
+						rs.getInt("id"),
+						rs.getString("first_name"),
+						rs.getString("last_name"),
 						rs.getInt("account_number"),
 						rs.getInt("client_id"),
 						rs.getInt("checking"),
@@ -78,34 +89,71 @@ public class AccountDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return joined;
 	}
 	
-	public void updateAccount(Account changeAccount) {
-		String sql = "update accounts set checking = ?, savings = ? where account_number = ? "
-				+ "and client_id = ?";
-		try (Connection conn = cu.getConnection()) {
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setInt(1, changeAccount.getCheckingAmount());
-			ps.setInt(2, changeAccount.getSavingsAmount());
-			ps.setInt(3, changeAccount.getAccountNumber());
-			ps.setInt(4, changeAccount.getClientId());
-			ps.executeUpdate();
+	public boolean updateAccount(Account changeAccount) {
+		String sqlInitial = "update bankingapp.accounts set checking = ?, savings = ?"
+				+ " where account_number = ?"
+				+ " and client_id = ?";
+		Account a = null;
+		try (Connection connInitial = cu.getConnection()) {
+			PreparedStatement psInitial = connInitial.prepareStatement(sqlInitial);
+			psInitial.setInt(1, changeAccount.getCheckingAmount());
+			psInitial.setInt(2, changeAccount.getSavingsAmount());
+			psInitial.setInt(3, changeAccount.getAccountNumber());
+			psInitial.setInt(4, changeAccount.getClientId());
+			int updatedInitial = psInitial.executeUpdate();
+			if (updatedInitial != 0) {
+				String sqlSubsequent = "select * from bankingapp.clients c"
+						+ " left join bankingapp.accounts a"
+						+ " on c.id = a.client_id"
+						+ " where c.id = ? and a.account_number = ?";
+				try (Connection connSubsequent = cu.getConnection()) {
+					PreparedStatement psSubsequent = connSubsequent.prepareStatement(sqlSubsequent);
+					psSubsequent.setInt(1, changeAccount.getClientId());
+					psSubsequent.setInt(2, changeAccount.getAccountNumber());
+					int updatedSubsequent = psSubsequent.executeUpdate();
+					if (updatedSubsequent != 0) {
+						return true;
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
 	
-	public void deleteAccount(int accountNumber, int clientId) {
-		String sql = "delete from accounts where account_number = ? "
+	public boolean deleteAccount(int clientId, int accountNumber) {
+		String sql = "delete from bankingapp.accounts where account_number = ? "
 				+ "client_id = ?";
+		boolean deletedAccount = false;
 		try (Connection conn = cu.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, accountNumber);
 			ps.setInt(2, clientId);
-			ps.execute();
+			int ifDeleted = ps.executeUpdate();
+			if (ifDeleted != 0) {
+				deletedAccount = true;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return deletedAccount;
+	}
+	
+	public void withdraw() {
+		String sql = "";
+	}
+	
+	public void deposit() {
+		String sql = "";
+	}
+	
+	public void transfer() {
+		String sql = "";
 	}
 }
