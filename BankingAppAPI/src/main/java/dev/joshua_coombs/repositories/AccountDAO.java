@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import dev.joshua_coombs.models.Account;
 import dev.joshua_coombs.models.ClientAccountLeftJoin;
@@ -33,27 +35,27 @@ public class AccountDAO {
 		return a;
 	}
 	
-	public ClientAccountLeftJoin getAllAccountsByClientId(int clientId) {
+	public List<ClientAccountLeftJoin> getAllAccountsByClientId(int clientId) {
 		String sql = "select * from bankingapp.clients c"
 				+ " left join bankingapp.accounts a"
 				+ " on c.id = a.client_id"
 				+ " where c.id = ?";
-		ClientAccountLeftJoin joined = null;
+		List<ClientAccountLeftJoin> joined = new ArrayList<>();
 		try (Connection conn = cu.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, clientId);
 			ResultSet rs = ps.executeQuery();
 			
 			//if may increment before
-			if (rs.next()) {
-				joined = new ClientAccountLeftJoin(
+			while (rs.next()) {
+				joined.add(new ClientAccountLeftJoin(
 						rs.getInt("id"),
 						rs.getString("first_name"),
 						rs.getString("last_name"),
 						rs.getInt("account_number"),
 						rs.getInt("client_id"),
 						rs.getInt("checking"),
-						rs.getInt("savings"));
+						rs.getInt("savings")));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -90,6 +92,7 @@ public class AccountDAO {
 		return joined;
 	}
 	
+	//needs to be fixed
 	public boolean updateAccount(Account changeAccount) {
 		String sql = "update bankingapp.accounts set checking = ?, savings = ?"
 				+ " where account_number = ?"
@@ -110,6 +113,7 @@ public class AccountDAO {
 		return false;
 	}
 	
+	//not sure yet
 	public boolean deleteAccount(int clientId, int accountNumber) {
 		String sql = "delete from bankingapp.accounts where account_number = ? "
 				+ "client_id = ?";

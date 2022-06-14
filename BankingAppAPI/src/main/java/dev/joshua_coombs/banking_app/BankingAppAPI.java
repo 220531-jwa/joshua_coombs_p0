@@ -22,19 +22,18 @@ public class BankingAppAPI {
 					put(ClientController::updateClientById); //works
 					delete(ClientController::deleteClientById); //works
 					path("/accounts", () -> {
-						post(AccountController::createAccount); 
-						//creates a new account for client with the id of 5 return a 201 status code
-						get(AccountController::getAllAccountsByClientId); //implement
-						//get all accounts for client 7 return 404 if no client exists
+						post(AccountController::createAccount); //works
+						get(AccountController::getAllAccountsByClientId); //works
 						path("/{account_number}", () -> {
-							get(AccountController::getSpecificAccountByClientId); //implement
-							//get account 4 for client 9 return 404 if no account or client exists
-							put(AccountController::updateAccount); //implement
+							get(AccountController::getSpecificAccountByClientId); //works
+							put(AccountController::updateAccount); //doesn't work
 							//update account with the id 3 for client 10 return 404 if no account or client exists
-							delete(AccountController::deleteAccount);
+							delete(AccountController::deleteAccount); //not sure yet
 							//delete account 6 for client 15 return 404 if no account or client exists
+							patch(AccountController::withdrawFromAccount); //need to implement
+							patch(AccountController::depositIntoAccount); //need to implement
 							path("/transfer/{other_account}", () -> {
-								
+								patch(AccountController::transferFunds); //need to implement
 							});
 						});
 					});
@@ -44,9 +43,10 @@ public class BankingAppAPI {
 		
 		app.exception(Exception.class, (e, ctx) -> {
 			ctx.status(404);
-			ctx.result("<h1>User not found</h1>");
+			ctx.result("Not found");
 		});
 		
+		/*
 		app.get("/clients/7/accounts/accounts?amountLessThan=2000&amountGreaterThan400", ctx -> {
 			//get all accounts for client 7 between 400 and 2000 return 404 if no client exists
 		});
@@ -65,6 +65,7 @@ public class BankingAppAPI {
 			//transfer funds from account 7 to account 8 (Body: {"amount":500}) return 404 if no  
 			//client or either account exists return 422 if insufficient funds
 		});
+		*/
 	}
 
 }

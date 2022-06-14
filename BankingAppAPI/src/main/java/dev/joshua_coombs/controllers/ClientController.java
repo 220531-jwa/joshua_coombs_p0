@@ -38,7 +38,6 @@ public class ClientController {
 		try {
 			c = clientService.getClientById(id);
 		} catch (Exception e) {
-			//ctx.status(404);
 			e.printStackTrace();
 		}
 		ctx.status(200);

@@ -1,5 +1,7 @@
 package dev.joshua_coombs.services;
 
+import java.util.List;
+
 import dev.joshua_coombs.models.Account;
 import dev.joshua_coombs.models.ClientAccountLeftJoin;
 import dev.joshua_coombs.repositories.AccountDAO;
@@ -13,16 +15,12 @@ public class AccountService {
 		return newAccount;
 	}
 	
-	public ClientAccountLeftJoin getAllAccountsByClientId(int clientId) {
+	public List<ClientAccountLeftJoin> getAllAccountsByClientId(int clientId) {
 		return accountDao.getAllAccountsByClientId(clientId);
 	}
 	
 	public ClientAccountLeftJoin getSpecificAccountByClientId(int clientId, int accountNumber) throws Exception {
-		ClientAccountLeftJoin a = accountDao.getSpecificAccountByClientId(clientId, accountNumber);
-		if (a == null) {
-			throw new Exception("Account not found");
-		}
-		return a;
+		return accountDao.getSpecificAccountByClientId(clientId, accountNumber);
 	}
 	
 	public boolean updateAccount(Account changeAccount) {

@@ -1,5 +1,7 @@
 package dev.joshua_coombs.controllers;
 
+import java.util.List;
+
 import dev.joshua_coombs.models.Account;
 import dev.joshua_coombs.models.Client;
 import dev.joshua_coombs.models.ClientAccountLeftJoin;
@@ -24,12 +26,12 @@ public class AccountController {
 	}
 	
 	public static void getAllAccountsByClientId(Context ctx) {
-		int clientId = Integer.parseInt(ctx.pathParam("client_id"));
-		Client verifyId;
+		int clientId = Integer.parseInt(ctx.pathParam("id"));
+		Client verifyId = null;
 		try {
 			verifyId = clientService.getClientById(clientId);
-			if (verifyId.getId() == clientId) {
-				ClientAccountLeftJoin accounts = accountService.getAllAccountsByClientId(clientId);
+			if (verifyId != null) {
+				List<ClientAccountLeftJoin> accounts = accountService.getAllAccountsByClientId(clientId);
 				ctx.status(200);
 				ctx.json(accounts);
 			} else {
@@ -41,9 +43,17 @@ public class AccountController {
 	}
 	
 	public static void getSpecificAccountByClientId(Context ctx) {
-		int clientId = Integer.parseInt(ctx.pathParam("client_id"));
+		int clientId = Integer.parseInt(ctx.pathParam("id"));
 		int accountNumber = Integer.parseInt(ctx.pathParam("account_number"));
-		//Client verifyId;
+		ClientAccountLeftJoin verifyAccount = null;
+		try {
+			verifyAccount = accountService.getSpecificAccountByClientId(clientId, accountNumber);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		ctx.status(200);
+		ctx.json(verifyAccount);
+		/*
 		try {
 			Client verifyId = clientService.getClientById(clientId);
 			if (verifyId.getId() == clientId) {
@@ -61,6 +71,7 @@ public class AccountController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 	
 	public static void updateAccount(Context ctx) {

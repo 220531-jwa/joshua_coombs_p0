@@ -17,11 +17,7 @@ public class ClientService {
 	}
 	
 	public Client getClientById(int id) throws Exception {
-		Client c = clientDao.getClientById(id);
-		if (c == null) {
-			throw new Exception("Client not found");
-		}
-		return c;
+		return clientDao.getClientById(id);
 	}
 	
 	public boolean deleteClientById(int id) {
