@@ -5,7 +5,6 @@ public class ClientAccountLeftJoin {
 	private String firstName;
 	private String lastName;
 	private int accountNumber;
-	private int clientId;
 	private int checkingAmount;
 	private int savingsAmount;
 	
@@ -13,14 +12,13 @@ public class ClientAccountLeftJoin {
 		super();
 	}
 	
-	public ClientAccountLeftJoin(int id, String firstName, String lastName, int accountNumber, int clientId,
+	public ClientAccountLeftJoin(int id, String firstName, String lastName, int accountNumber,
 			int checkingAmount, int savingsAmount) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.accountNumber = accountNumber;
-		this.clientId = clientId;
 		this.checkingAmount = checkingAmount;
 		this.savingsAmount = savingsAmount;
 	}
@@ -57,14 +55,6 @@ public class ClientAccountLeftJoin {
 		this.accountNumber = accountNumber;
 	}
 
-	public int getClientId() {
-		return clientId;
-	}
-
-	public void setClientId(int clientId) {
-		this.clientId = clientId;
-	}
-
 	public int getCheckingAmount() {
 		return checkingAmount;
 	}
@@ -84,7 +74,7 @@ public class ClientAccountLeftJoin {
 	@Override
 	public String toString() {
 		return "ClientAccountLeftJoin [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", accountNumber=" + accountNumber + ", clientId=" + clientId + ", checkingAmount=" + checkingAmount
+				+ ", accountNumber=" + accountNumber + ", checkingAmount=" + checkingAmount
 				+ ", savingsAmount=" + savingsAmount + "]";
 	}
 	

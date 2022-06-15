@@ -36,7 +36,8 @@ public class AccountDAO {
 	}
 	
 	public List<ClientAccountLeftJoin> getAllAccountsByClientId(int clientId) {
-		String sql = "select * from bankingapp.clients c"
+		String sql = "select id, first_name, last_name, account_number, checking, savings"
+				+ " from bankingapp.clients c"
 				+ " left join bankingapp.accounts a"
 				+ " on c.id = a.client_id"
 				+ " where c.id = ?";
@@ -52,7 +53,6 @@ public class AccountDAO {
 						rs.getString("first_name"),
 						rs.getString("last_name"),
 						rs.getInt("account_number"),
-						rs.getInt("client_id"),
 						rs.getInt("checking"),
 						rs.getInt("savings")));
 			}
@@ -63,7 +63,8 @@ public class AccountDAO {
 	}
 	
 	public ClientAccountLeftJoin getSpecificAccountByClientId(int clientId, int accountNumber) {
-		String sql = "select * from bankingapp.clients c"
+		String sql = "select id, first_name, last_name, account_number, checking, savings"
+				+ " from bankingapp.clients c"
 				+ " left join bankingapp.accounts a"
 				+ " on c.id = a.client_id"
 				+ " where c.id = ? and a.account_number = ?";
@@ -81,7 +82,6 @@ public class AccountDAO {
 						rs.getString("first_name"),
 						rs.getString("last_name"),
 						rs.getInt("account_number"),
-						rs.getInt("client_id"),
 						rs.getInt("checking"),
 						rs.getInt("savings"));
 			}
