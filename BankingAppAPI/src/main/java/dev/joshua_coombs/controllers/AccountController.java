@@ -3,6 +3,7 @@ package dev.joshua_coombs.controllers;
 import java.util.List;
 
 import dev.joshua_coombs.models.Account;
+import dev.joshua_coombs.models.AlternateCALeftJoin;
 import dev.joshua_coombs.models.Client;
 import dev.joshua_coombs.models.ClientAccountLeftJoin;
 import dev.joshua_coombs.repositories.AccountDAO;
@@ -60,9 +61,11 @@ public class AccountController {
 	public static void getAccountsInValueRange(Context ctx) {
 		int clientId = Integer.parseInt(ctx.pathParam("id"));
 		String whichType = ctx.pathParam("which_type"); //finish
-		int low = 400;
-		int high = 200;
-		ClientAccountLeftJoin verifyAccount = null;
+		String amountLessThan = ctx.queryParam("amountLessThan");
+		String amountGreaterThan = ctx.queryParam("amountGreaterThan");
+		int low = Integer.parseInt(amountGreaterThan);
+		int high = Integer.parseInt(amountLessThan);
+		AlternateCALeftJoin verifyAccount = null;
 		try {
 			verifyAccount = accountService.getAccountsInValueRange(clientId, whichType, low, high);
 		} catch (Exception e) {

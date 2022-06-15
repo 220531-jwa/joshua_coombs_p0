@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.joshua_coombs.models.Account;
+import dev.joshua_coombs.models.AlternateCALeftJoin;
 import dev.joshua_coombs.models.ClientAccountLeftJoin;
 import dev.joshua_coombs.utils.ConnectionUtil;
 
@@ -91,28 +92,26 @@ public class AccountDAO {
 		return joined;
 	}
 	
-	public ClientAccountLeftJoin getAccountsInValueRange(int clientId, String whichType, int low, int high) {
+	public AlternateCALeftJoin getAccountsInValueRange(int clientId, String whichType, int low, int high) {
 		if (whichType.equals("checking")) {
-			String sqlChecking = "select id, first_name, last_name, account_number, checking from bankingapp.clients c \r\n"
+			String sqlChecking = "select id, first_name, last_name, account_number, checking from bankingapp.clients c "
 					+ "left join bankingapp.accounts a "
 					+ "on c.id = a.client_id "
 					+ "where " + whichType + " > ? and " + whichType + " < ?;";
-			ClientAccountLeftJoin joinedChecking = null;
+			AlternateCALeftJoin joinedChecking = null;
 			try (Connection connChecking = cu.getConnection()) {
 				PreparedStatement ps = connChecking.prepareStatement(sqlChecking);
-				ps.setInt(1, clientId);
-				ps.setInt(2, low);
+				ps.setInt(1, low);
 				ps.setInt(2, high);
 				
 				ResultSet rs = ps.executeQuery();
 				if (rs.next()) {
-					joinedChecking = new ClientAccountLeftJoin(
+					joinedChecking = new AlternateCALeftJoin(
 							rs.getInt("id"),
 							rs.getString("first_name"),
 							rs.getString("last_name"),
 							rs.getInt("account_number"),
-							rs.getInt("checking"),
-							rs.getInt("savings"));
+							rs.getInt("checking"));
 				}
 				
 			} catch (SQLException e) {
@@ -120,25 +119,23 @@ public class AccountDAO {
 			}
 			return joinedChecking;
 		} else if (whichType.equals("savings")) {
-			String sqlSavings = "select id, first_name, last_name, account_number, savings from bankingapp.clients c \r\n"
-					+ "left join bankingapp.accounts a \r\n"
-					+ "on c.id = a.client_id \r\n"
+			String sqlSavings = "select id, first_name, last_name, account_number, savings from bankingapp.clients c "
+					+ "left join bankingapp.accounts a "
+					+ "on c.id = a.client_id "
 					+ "where " + whichType + " > ? and " + whichType + " < ?;";
-			ClientAccountLeftJoin joinedSavings = null;
+			AlternateCALeftJoin joinedSavings = null;
 			try (Connection connSavings = cu.getConnection()) {
 				PreparedStatement ps = connSavings.prepareStatement(sqlSavings);
-				ps.setInt(1, clientId);
-				ps.setInt(2, low);
+				ps.setInt(1, low);
 				ps.setInt(2, high);
 				
 				ResultSet rs = ps.executeQuery();
 				if (rs.next()) {
-					joinedSavings = new ClientAccountLeftJoin(
+					joinedSavings = new AlternateCALeftJoin(
 							rs.getInt("id"),
 							rs.getString("first_name"),
 							rs.getString("last_name"),
 							rs.getInt("account_number"),
-							rs.getInt("checking"),
 							rs.getInt("savings"));
 				}
 				

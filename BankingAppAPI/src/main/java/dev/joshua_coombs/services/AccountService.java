@@ -3,6 +3,7 @@ package dev.joshua_coombs.services;
 import java.util.List;
 
 import dev.joshua_coombs.models.Account;
+import dev.joshua_coombs.models.AlternateCALeftJoin;
 import dev.joshua_coombs.models.ClientAccountLeftJoin;
 import dev.joshua_coombs.repositories.AccountDAO;
 
@@ -27,7 +28,7 @@ public class AccountService {
 		return accountDao.getSpecificAccountByClientId(clientId, accountNumber);
 	}
 	
-	public ClientAccountLeftJoin getAccountsInValueRange(int clientId, String whichType, int low, int high) {
+	public AlternateCALeftJoin getAccountsInValueRange(int clientId, String whichType, int low, int high) {
 		return accountDao.getAccountsInValueRange(clientId, whichType, low, high);
 	}
 	
