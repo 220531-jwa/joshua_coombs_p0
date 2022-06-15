@@ -59,7 +59,7 @@ public class AccountController {
 	
 	public static void getAccountsInValueRange(Context ctx) {
 		int clientId = Integer.parseInt(ctx.pathParam("id"));
-		String whichType = ""; //finish
+		String whichType = ctx.pathParam("which_type"); //finish
 		int low = 400;
 		int high = 200;
 		ClientAccountLeftJoin verifyAccount = null;

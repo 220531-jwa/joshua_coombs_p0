@@ -26,7 +26,9 @@ public class BankingAppAPI {
 						get(AccountController::getAllAccountsByClientId); //works
 						path("/{account_number}", () -> {
 							get(AccountController::getSpecificAccountByClientId); //works
-							get(AccountController::getAccountsInValueRange);
+							path("/{which_type}", () -> {
+								get(AccountController::getAccountsInValueRange);
+							});
 							put(AccountController::updateAccount); //doesn't work
 							//update account with the id 3 for client 10 return 404 if no account or client exists
 							delete(AccountController::deleteAccount); //not sure yet
