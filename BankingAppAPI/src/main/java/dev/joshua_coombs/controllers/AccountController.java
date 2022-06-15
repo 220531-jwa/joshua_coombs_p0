@@ -58,7 +58,18 @@ public class AccountController {
 	}
 	
 	public static void getAccountsInValueRange(Context ctx) {
-		//here
+		int clientId = Integer.parseInt(ctx.pathParam("id"));
+		String whichType = ""; //finish
+		int low = 400;
+		int high = 200;
+		ClientAccountLeftJoin verifyAccount = null;
+		try {
+			verifyAccount = accountService.getAccountsInValueRange(clientId, whichType, low, high);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		ctx.status(200);
+		ctx.json(verifyAccount);
 	}
 	
 	public static void updateAccount(Context ctx) {

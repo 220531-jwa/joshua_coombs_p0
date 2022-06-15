@@ -27,8 +27,8 @@ public class AccountService {
 		return accountDao.getSpecificAccountByClientId(clientId, accountNumber);
 	}
 	
-	public ClientAccountLeftJoin getAccountsInValueRange(int clientId, int low, int high) {
-		return null;
+	public ClientAccountLeftJoin getAccountsInValueRange(int clientId, String whichType, int low, int high) {
+		return accountDao.getAccountsInValueRange(clientId, whichType, low, high);
 	}
 	
 	public boolean updateAccount(Account changeAccount) {
