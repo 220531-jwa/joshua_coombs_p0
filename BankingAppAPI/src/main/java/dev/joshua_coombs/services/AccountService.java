@@ -7,7 +7,11 @@ import dev.joshua_coombs.models.ClientAccountLeftJoin;
 import dev.joshua_coombs.repositories.AccountDAO;
 
 public class AccountService {
-	private static AccountDAO accountDao = new AccountDAO();
+	private static AccountDAO accountDao;
+	
+	public AccountService(AccountDAO accountDao) {
+		this.accountDao = accountDao;
+	}
 	//private static ClientDAO clientDao = new ClientDAO();
 	
 	public Account createAccount(Account a) {
@@ -21,6 +25,10 @@ public class AccountService {
 	
 	public ClientAccountLeftJoin getSpecificAccountByClientId(int clientId, int accountNumber) throws Exception {
 		return accountDao.getSpecificAccountByClientId(clientId, accountNumber);
+	}
+	
+	public ClientAccountLeftJoin getAccountsInValueRange(int clientId, int low, int high) {
+		return null;
 	}
 	
 	public boolean updateAccount(Account changeAccount) {

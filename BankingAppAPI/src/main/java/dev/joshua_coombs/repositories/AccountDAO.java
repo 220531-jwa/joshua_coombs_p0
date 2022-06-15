@@ -91,6 +91,65 @@ public class AccountDAO {
 		return joined;
 	}
 	
+	public ClientAccountLeftJoin getAccountsInValueRange(int clientId, String whichType, int low, int high) {
+		if (whichType.equals("checking")) {
+			String sqlChecking = "select id, first_name, last_name, account_number, checking from bankingapp.clients c \r\n"
+					+ "left join bankingapp.accounts a "
+					+ "on c.id = a.client_id "
+					+ "where " + whichType + " > ? and " + whichType + " < ?;";
+			ClientAccountLeftJoin joinedChecking = null;
+			try (Connection connChecking = cu.getConnection()) {
+				PreparedStatement ps = connChecking.prepareStatement(sqlChecking);
+				ps.setInt(1, clientId);
+				ps.setInt(2, low);
+				ps.setInt(2, high);
+				
+				ResultSet rs = ps.executeQuery();
+				if (rs.next()) {
+					joinedChecking = new ClientAccountLeftJoin(
+							rs.getInt("id"),
+							rs.getString("first_name"),
+							rs.getString("last_name"),
+							rs.getInt("account_number"),
+							rs.getInt("checking"),
+							rs.getInt("savings"));
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return joinedChecking;
+		} else if (whichType.equals("savings")) {
+			String sqlSavings = "select id, first_name, last_name, account_number, savings from bankingapp.clients c \r\n"
+					+ "left join bankingapp.accounts a \r\n"
+					+ "on c.id = a.client_id \r\n"
+					+ "where " + whichType + " > ? and " + whichType + " < ?;";
+			ClientAccountLeftJoin joinedSavings = null;
+			try (Connection connSavings = cu.getConnection()) {
+				PreparedStatement ps = connSavings.prepareStatement(sqlSavings);
+				ps.setInt(1, clientId);
+				ps.setInt(2, low);
+				ps.setInt(2, high);
+				
+				ResultSet rs = ps.executeQuery();
+				if (rs.next()) {
+					joinedSavings = new ClientAccountLeftJoin(
+							rs.getInt("id"),
+							rs.getString("first_name"),
+							rs.getString("last_name"),
+							rs.getInt("account_number"),
+							rs.getInt("checking"),
+							rs.getInt("savings"));
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return joinedSavings;
+		}
+		return null;
+	}
+	
 	//needs to be fixed
 	public boolean updateAccount(Account changeAccount) {
 		String sql = "update bankingapp.accounts set checking = ?, savings = ?"

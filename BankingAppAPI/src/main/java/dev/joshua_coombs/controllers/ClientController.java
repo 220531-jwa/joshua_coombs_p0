@@ -3,11 +3,12 @@ package dev.joshua_coombs.controllers;
 import java.util.List;
 
 import dev.joshua_coombs.models.Client;
+import dev.joshua_coombs.repositories.ClientDAO;
 import dev.joshua_coombs.services.ClientService;
 import io.javalin.http.Context;
 
 public class ClientController {
-	private static ClientService clientService = new ClientService();
+	private static ClientService clientService = new ClientService(new ClientDAO());
 	private static List<Client> clients = clientService.getAllClients();
 	
 	public static void createClient(Context ctx) {

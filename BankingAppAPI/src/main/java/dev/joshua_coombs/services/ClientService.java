@@ -6,7 +6,11 @@ import dev.joshua_coombs.models.Client;
 import dev.joshua_coombs.repositories.ClientDAO;
 
 public class ClientService {
-	private static ClientDAO clientDao = new ClientDAO();
+	private static ClientDAO clientDao;
+	
+	public ClientService(ClientDAO clientDao) {
+		this.clientDao = clientDao;
+	}
 	
 	public Client createClient(Client c) {
 		return clientDao.createClient(c);
