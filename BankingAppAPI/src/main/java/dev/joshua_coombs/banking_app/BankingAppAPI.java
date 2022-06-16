@@ -40,8 +40,8 @@ public class BankingAppAPI {
 									patch(AccountController::withdraw); //works
 								});
 							});
-							path("/{which_type_tf}/transfer/{other_account}/{which_type_tt}/{amount_one}/{amount_two}", () -> {
-								patch(AccountController::transfer); //doesn't work yet
+							path("/{which_type_tf}/transfer/{other_account}/{which_type_tt}/{amount}", () -> {
+								patch(AccountController::transfer); //works
 							});
 						});
 					});

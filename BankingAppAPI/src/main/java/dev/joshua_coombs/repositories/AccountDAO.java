@@ -270,15 +270,13 @@ public class AccountDAO {
 		} else if (fromWhichType.equals("savings")) {
 			amountTwo = ad.getSpecificAccountByClientId(clientId, toAccount).getSavingsAmount() + amount;
 		}
-		String sql = "update bankingapp.accounts set " + fromWhichType + " = ?"
-				+ " where account_number = " + fromAccount + " and "
+		String sql = "update bankingapp.accounts set " + fromWhichType + " = "
+				+ amountOne + " where account_number = " + fromAccount + " and "
 				+ "client_id = " + clientId + "; update bankingapp.accounts set "
-				+ toWhichType + " = ?" + " where account_number = "
+				+ toWhichType + " = " + amountTwo + " where account_number = "
 				+ toAccount + " and client_id = " + clientId + ";";
 		try (Connection conn = cu.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setInt(1, amountOne);
-			ps.setInt(2, amountTwo);
 			int checkTransfer = ps.executeUpdate();
 			if (checkTransfer != 0) {
 				return true;
