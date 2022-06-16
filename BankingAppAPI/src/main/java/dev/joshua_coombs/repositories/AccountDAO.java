@@ -1,3 +1,13 @@
+/**
+ * This AccountDAO class is a Data Access Object for the accounts table,
+ * as well as two different left joins of the clients and accounts tables, 
+ * within the database which is used in the AccountService and 
+ * AccountController classes.
+ * 
+ * @author joshua_coombs
+ * @version 1.0
+ */
+
 package dev.joshua_coombs.repositories;
 
 import java.sql.Connection;
@@ -15,6 +25,13 @@ import dev.joshua_coombs.utils.ConnectionUtil;
 public class AccountDAO {
 	private static ConnectionUtil cu = ConnectionUtil.getConnectionUtil();
 	
+	/**
+	 * This method creates an account within the accounts table of
+	 * the database which is associated with a specific client id
+	 * 
+	 * @param a
+	 * @return
+	 */
 	public Account createAccount (Account a) {
 		String sql = "insert into bankingapp.accounts values (default, ?, ?, ?) returning *;";
 		try (Connection conn = cu.getConnection()) {
@@ -36,6 +53,13 @@ public class AccountDAO {
 		return a;
 	}
 	
+	/**
+	 * This method gets all the accounts associated with a specific client id
+	 * within the database
+	 * 
+	 * @param clientId
+	 * @return
+	 */
 	public List<ClientAccountLeftJoin> getAllAccountsByClientId(int clientId) {
 		String sql = "select id, first_name, last_name, account_number, checking, savings"
 				+ " from bankingapp.clients c"
@@ -63,6 +87,14 @@ public class AccountDAO {
 		return joined;
 	}
 	
+	/**
+	 * This method gets a specific account associated with a specific client id
+	 * within the database
+	 * 
+	 * @param clientId
+	 * @param accountNumber
+	 * @return
+	 */
 	public ClientAccountLeftJoin getSpecificAccountByClientId(int clientId, int accountNumber) {
 		String sql = "select id, first_name, last_name, account_number, checking, savings"
 				+ " from bankingapp.clients c"
@@ -92,6 +124,16 @@ public class AccountDAO {
 		return joined;
 	}
 	
+	/**
+	 * This method gets all the accounts associated with a specific client id
+	 * which abide by a certain value range
+	 * 
+	 * @param clientId
+	 * @param whichType
+	 * @param low
+	 * @param high
+	 * @return
+	 */
 	public AlternateCALeftJoin getAccountsInValueRange(int clientId, String whichType, int low, int high) {
 		if (whichType.equals("checking")) {
 			String sqlChecking = "select id, first_name, last_name, account_number, checking from bankingapp.clients c "
@@ -147,6 +189,15 @@ public class AccountDAO {
 		return null;
 	}
 	
+	/**
+	 * This method updates a specific account associated with a specific client id
+	 * 
+	 * @param clientId
+	 * @param accountNumber
+	 * @param checkingAmount
+	 * @param savingsAmount
+	 * @return
+	 */
 	public boolean updateAccount(int clientId, int accountNumber, int checkingAmount, int savingsAmount) {
 		String sql = "update bankingapp.accounts set checking = "
 				+ checkingAmount + ", savings = " + savingsAmount + " where "
@@ -164,6 +215,16 @@ public class AccountDAO {
 		return false;
 	}
 	
+	/**
+	 * This method withdraws a certain amount from either a checking or savings
+	 * sub-account, within a specific account associated with a client id
+	 * 
+	 * @param clientId
+	 * @param accountNumber
+	 * @param whichType
+	 * @param amountToWithdraw
+	 * @return
+	 */
 	public boolean withdraw(int clientId, int accountNumber, String whichType, int amountToWithdraw) {
 		ClientAccountLeftJoin a = getSpecificAccountByClientId(clientId, accountNumber);
 		if (whichType.equals("checking")) {
@@ -204,6 +265,16 @@ public class AccountDAO {
 		return false;
 	}
 	
+	/**
+	 * This method deposits a certain amount into either a checking or savings
+	 * sub-account, within a specific account associated with a client id
+	 * 
+	 * @param clientId
+	 * @param accountNumber
+	 * @param whichType
+	 * @param amountToDeposit
+	 * @return
+	 */
 	public boolean deposit(int clientId, int accountNumber, String whichType, int amountToDeposit) {
 		ClientAccountLeftJoin a = getSpecificAccountByClientId(clientId, accountNumber);
 		if (whichType.equals("checking")) {
@@ -244,6 +315,19 @@ public class AccountDAO {
 		return false;
 	}
 
+	/**
+	 * This method transfers a certain amount from one account (either 
+	 * checking or savings) and to another account (either checking or 
+	 * savings), both of which are associated with a specific client id
+	 * 
+	 * @param clientId
+	 * @param fromAccount
+	 * @param toAccount
+	 * @param fromWhichType
+	 * @param toWhichType
+	 * @param amount
+	 * @return
+	 */
 	public boolean transfer(int clientId, int fromAccount, int toAccount, 
 			String fromWhichType, String toWhichType, int amount) {
 		AccountDAO ad = new AccountDAO();
@@ -277,6 +361,13 @@ public class AccountDAO {
 		return false;
 	}
 	
+	/**
+	 * This methods deletes a specific account associated with a specific client id
+	 * 
+	 * @param clientId
+	 * @param accountNumber
+	 * @return
+	 */
 	public boolean deleteAccount(int clientId, int accountNumber) {
 		String sql = "delete from bankingapp.accounts where account_number = ? "
 				+ "and client_id = ?;";

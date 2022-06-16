@@ -1,7 +1,7 @@
 /**
  * This BankingAppAPI performs what the README.md file specifies
  * 
- * @author joshuacoombs
+ * @author joshua_coombs
  * @version 1.0
  */
 
@@ -14,6 +14,11 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class BankingAppAPI {
 	
+	/**
+	 * This method is the entry point for the application
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Javalin app = Javalin.create();
 		app.start();

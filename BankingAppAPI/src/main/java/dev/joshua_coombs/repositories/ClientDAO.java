@@ -1,3 +1,11 @@
+/**
+ * This ClientDAO class is a Data Access Object for the clients table within the database 
+ * which is used in the ClientService and ClientController classes.
+ * 
+ * @author joshua_coombs
+ * @version 1.0
+ */
+
 package dev.joshua_coombs.repositories;
 
 import java.sql.Connection;
@@ -13,6 +21,12 @@ import dev.joshua_coombs.utils.ConnectionUtil;
 public class ClientDAO {
 	private static ConnectionUtil cu = ConnectionUtil.getConnectionUtil();
 	
+	/**
+	 * This method creates a client within the clients table of the database
+	 * 
+	 * @param c
+	 * @return
+	 */
 	public Client createClient(Client c) {
 		String sql = "insert into bankingapp.clients values (default, ?, ?) returning *";
 		try (Connection conn = cu.getConnection()) {
@@ -33,6 +47,12 @@ public class ClientDAO {
 		return c;
 	}
 	
+	/**
+	 * This method gets all of the clients in the clients table of the
+	 * database
+	 * 
+	 * @return
+	 */
 	public List<Client> getAllClients() {
 		List<Client> clients = new ArrayList<>();
 		String sql = "select * from bankingapp.clients";
@@ -52,6 +72,13 @@ public class ClientDAO {
 		return clients;
 	}
 	
+	/**
+	 * This method gets a specific client by their id with the clients table 
+	 * of the database
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public Client getClientById(int id) {
 		String sql = "select * from bankingapp.clients where id = ?";
 		Client c = null;
@@ -71,6 +98,13 @@ public class ClientDAO {
 		return c;
 	}
 	
+	/**
+	 * This method updates a specific client by their id from the clients 
+	 * table within the database
+	 * 
+	 * @param changeClient
+	 * @return
+	 */
 	public boolean updateClientById (Client changeClient) {
 		String sql = "update bankingapp.clients set (first_name, last_name)"
 				+ " = (?, ?) where id = ?";
@@ -89,6 +123,13 @@ public class ClientDAO {
 		return false;
 	}
 	
+	/**
+	 * This method deletes a specific client by their id from the clients 
+	 * table within the database
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public boolean deleteClientById(int id) {
 		String sql = "delete from bankingapp.clients where id = ?";
 		boolean deletedClient = false;

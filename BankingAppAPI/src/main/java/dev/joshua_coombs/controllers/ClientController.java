@@ -1,6 +1,7 @@
 /**
- * This ClientController handles methods defined within ClientService. The methods
- * of this class are accessed by the main method of the BankingAppAPI class
+ * This ClientController class handles methods defined within the ClientService
+ * class. The methods  of this class are accessed by the main method of the 
+ * BankingAppAPI class
  * 
  * @author joshuacoombs
  * @version 1.0
@@ -21,6 +22,7 @@ public class ClientController {
 	
 	/**
 	 * This method creates a client within the clients table of the database
+	 * 
 	 * @param ctx
 	 */
 	public static void createClient(Context ctx) {
@@ -38,6 +40,7 @@ public class ClientController {
 	/**
 	 * This method gets all of the clients in the clients table of the
 	 * database
+	 * 
 	 * @param ctx
 	 */
 	public static void getAllClients(Context ctx) {
@@ -52,6 +55,7 @@ public class ClientController {
 	/**
 	 * This method gets a specific client by their id with the clients table 
 	 * of the database
+	 * 
 	 * @param ctx
 	 */
 	public static void getClientById(Context ctx) {
@@ -67,23 +71,9 @@ public class ClientController {
 	}
 	
 	/**
-	 * This method deletes a specific client by their id from the clients 
-	 * table within the database
-	 * @param ctx
-	 */
-	public static void deleteClientById(Context ctx) {
-        int id = Integer.parseInt(ctx.pathParam("id"));
-        boolean deletedClient = clientService.deleteClientById(id);
-        if (!deletedClient) {
-            ctx.status(404);
-        } else {
-           ctx.status(205);
-        }
-    }
-	
-	/**
 	 * This method updates a specific client by their id from the clients 
 	 * table within the database
+	 * 
 	 * @param ctx
 	 */
 	public static void updateClientById(Context ctx) {
@@ -97,4 +87,20 @@ public class ClientController {
 			ctx.status(200);
 		}
 	}
+	
+	/**
+	 * This method deletes a specific client by their id from the clients 
+	 * table within the database
+	 * 
+	 * @param ctx
+	 */
+	public static void deleteClientById(Context ctx) {
+        int id = Integer.parseInt(ctx.pathParam("id"));
+        boolean deletedClient = clientService.deleteClientById(id);
+        if (!deletedClient) {
+            ctx.status(404);
+        } else {
+           ctx.status(205);
+        }
+    }
 }

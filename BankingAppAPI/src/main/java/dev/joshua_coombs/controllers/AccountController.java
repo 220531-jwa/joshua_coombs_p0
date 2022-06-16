@@ -1,8 +1,9 @@
 /**
- * This AccountController handles methods defined within AccountService. The methods
- * of this class are accessed by the main method of the BankingAppAPI class
+ * This AccountController class handles methods defined within the AccountService
+ * class. The methods of this class are accessed by the main method of the 
+ * BankingAppAPI class.
  * 
- * @author joshuacoombs
+ * @author joshua_coombs
  * @version 1.0
  */
 
@@ -26,7 +27,9 @@ public class AccountController {
 	
 	/**
 	 * This method creates an account within the accounts table of
-	 * the database
+	 * the database which is associated with a specific client id and
+	 * then displays the account
+	 * 
 	 * @param ctx
 	 */
 	public static void createAccount(Context ctx) {
@@ -44,6 +47,7 @@ public class AccountController {
 	/**
 	 * This method gets all the accounts associated with a specific client id
 	 * within the database
+	 * 
 	 * @param ctx
 	 */
 	public static void getAllAccountsByClientId(Context ctx) {
@@ -66,6 +70,7 @@ public class AccountController {
 	/**
 	 * This method gets a specific account associated with a specific client id
 	 * within the database
+	 * 
 	 * @param ctx
 	 */
 	public static void getSpecificAccountByClientId(Context ctx) {
@@ -84,6 +89,7 @@ public class AccountController {
 	/**
 	 * This method gets all the accounts associated with a specific client id
 	 * which abide by a certain value range
+	 * 
 	 * @param ctx
 	 */
 	public static void getAccountsInValueRange(Context ctx) {
@@ -105,6 +111,7 @@ public class AccountController {
 	
 	/**
 	 * This method updates a specific account associated with a specific client id
+	 * 
 	 * @param ctx
 	 */
 	public static void updateAccount(Context ctx) {
@@ -125,6 +132,7 @@ public class AccountController {
 	 * This method withdraws a certain amount from either a checking or savings
 	 * sub-account, within a specific account associated with a client id, and
 	 * displays the details of the account after the withdrawal
+	 * 
 	 * @param ctx
 	 */
 	public static void withdraw(Context ctx) {
@@ -156,6 +164,7 @@ public class AccountController {
 	 * This method deposits a certain amount into either a checking or savings
 	 * sub-account, within a specific account associated with a client id, and
 	 * displays the details of the account after the deposit
+	 * 
 	 * @param ctx
 	 */
 	public static void deposit(Context ctx) {
@@ -187,6 +196,7 @@ public class AccountController {
 	 * This method transfers a certain amount from one account (either 
 	 * checking or savings) and to another account (either checking or 
 	 * savings), both of which are associated with a specific client id
+	 * 
 	 * @param ctx
 	 */
 	public static void transfer(Context ctx) {
@@ -223,6 +233,7 @@ public class AccountController {
 	
 	/**
 	 * This methods deletes a specific account associated with a specific client id
+	 * 
 	 * @param ctx
 	 */
 	public static void deleteAccount(Context ctx) {

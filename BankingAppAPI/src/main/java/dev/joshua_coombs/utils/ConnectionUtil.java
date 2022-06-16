@@ -1,3 +1,12 @@
+/**
+ * This ConnectionUtil class is serves as the connection point between this
+ * Java application and the database and it is used by both the ClientDAO and
+ * AccountDAO classes.
+ * 
+ * @author joshua_coombs
+ * @version 1.0
+ */
+
 package dev.joshua_coombs.utils;
 
 import java.io.IOException;
@@ -11,6 +20,10 @@ public class ConnectionUtil {
 	private static ConnectionUtil cu;
 	private static Properties dbProps;
 	
+	/**
+	 * This constructor sets up the ConnectionUtil object with the appropriate
+	 * credentials to connect to the database
+	 */
 	private ConnectionUtil() {
 		dbProps = new Properties();
 		InputStream props = ConnectionUtil.class.getClassLoader().getResourceAsStream("connection.properties");
@@ -21,6 +34,11 @@ public class ConnectionUtil {
 		}
 	}
 	
+	/**
+	 * This method checks to make sure a connection is able to be made to the database
+	 * 
+	 * @return
+	 */
 	public static synchronized ConnectionUtil getConnectionUtil() {
 		if (cu == null) {
 			cu = new ConnectionUtil();
@@ -28,15 +46,14 @@ public class ConnectionUtil {
 		return cu;
 	}
 	
+	/**
+	 * This method actually makes the connection to the database
+	 * 
+	 * @return
+	 */
 	public Connection getConnection() {
 		Connection cnct = null;
-		/*
-		try {
-			Class.forName(dbProps.getProperty("driver"));
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
-		}
-		*/
+		
 		String url = dbProps.getProperty("url");
 		String username = dbProps.getProperty("username");
 		String password = dbProps.getProperty("password");
