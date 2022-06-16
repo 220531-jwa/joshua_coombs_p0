@@ -30,7 +30,7 @@ public class BankingAppAPI {
 						});
 						path("/{account_number}", () -> {
 							get(AccountController::getSpecificAccountByClientId); //works
-							put(AccountController::updateAccount); //doesn't work yet
+							put(AccountController::updateAccount); //works
 							delete(AccountController::deleteAccount); //works
 							path("/{which_type_dw}", () -> {
 								path("/deposit/{amount_d}", () -> {
@@ -53,27 +53,6 @@ public class BankingAppAPI {
 			ctx.status(404);
 			ctx.result("Not found");
 		});
-		
-		/*
-		app.get("/clients/7/accounts/accounts?amountLessThan=2000&amountGreaterThan400", ctx -> {
-			//get all accounts for client 7 between 400 and 2000 return 404 if no client exists
-		});
-		
-		
-		app.delete("/clients/15/accounts/6", ctx -> {
-			//delete account 6 for client 15 return 404 if no account or client exists
-		});
-		
-		app.patch("/clients/17/accounts/12", ctx -> {
-			//Withdraw/deposit given amount (Body: {"deposit":500} or {"withdraw":250} return 404  
-			//if no account or client exists return 422 if insufficient funds
-		});
-		
-		app.patch("/clients/17/accounts/7/transfer/8", ctx -> {
-			//transfer funds from account 7 to account 8 (Body: {"amount":500}) return 404 if no  
-			//client or either account exists return 422 if insufficient funds
-		});
-		*/
 	}
 
 }

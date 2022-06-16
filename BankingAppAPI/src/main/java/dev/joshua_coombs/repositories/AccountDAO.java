@@ -147,17 +147,13 @@ public class AccountDAO {
 		return null;
 	}
 	
-	//needs to be fixed
-	public boolean updateAccount(Account changeAccount) {
-		String sql = "update bankingapp.accounts set checking = ?, savings = ?"
-				+ " where account_number = ?"
-				+ " and client_id = ?;";
+	public boolean updateAccount(int clientId, int accountNumber, int checkingAmount, int savingsAmount) {
+		String sql = "update bankingapp.accounts set checking = "
+				+ checkingAmount + ", savings = " + savingsAmount + " where "
+				+ "account_number = " + accountNumber + " and "
+				+ "client_id = " + clientId + ";";
 		try (Connection conn = cu.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setInt(1, changeAccount.getCheckingAmount());
-			ps.setInt(2, changeAccount.getSavingsAmount());
-			ps.setInt(3, changeAccount.getAccountNumber());
-			ps.setInt(4, changeAccount.getClientId());
 			int updatedAccount = ps.executeUpdate();
 			if (updatedAccount != 0) {
 				return true;
@@ -168,10 +164,7 @@ public class AccountDAO {
 		return false;
 	}
 	
-	//ask if it's necessary to return account
 	public boolean withdraw(int clientId, int accountNumber, String whichType, int amountToWithdraw) {
-		//"/withdraw/{amount_w}"
-		
 		ClientAccountLeftJoin a = getSpecificAccountByClientId(clientId, accountNumber);
 		if (whichType.equals("checking")) {
 			int newAmount = a.getCheckingAmount() - amountToWithdraw;
@@ -211,9 +204,7 @@ public class AccountDAO {
 		return false;
 	}
 	
-	//ask if it's necessary to return account
 	public boolean deposit(int clientId, int accountNumber, String whichType, int amountToDeposit) {
-		//"/deposit/{amount_d}"
 		ClientAccountLeftJoin a = getSpecificAccountByClientId(clientId, accountNumber);
 		if (whichType.equals("checking")) {
 			int newAmount = a.getCheckingAmount() + amountToDeposit;
@@ -255,7 +246,6 @@ public class AccountDAO {
 
 	public boolean transfer(int clientId, int fromAccount, int toAccount, 
 			String fromWhichType, String toWhichType, int amount) {
-		//"/{which_type_tf}/transfer/{other_account}/{which_type_tt}/{amount_t}"
 		AccountDAO ad = new AccountDAO();
 		int amountOne = 0;
 		int amountTwo = 0;
@@ -287,7 +277,6 @@ public class AccountDAO {
 		return false;
 	}
 	
-	//not sure yet
 	public boolean deleteAccount(int clientId, int accountNumber) {
 		String sql = "delete from bankingapp.accounts where account_number = ? "
 				+ "and client_id = ?;";

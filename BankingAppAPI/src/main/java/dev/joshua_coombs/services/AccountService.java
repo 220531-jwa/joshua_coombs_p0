@@ -13,7 +13,6 @@ public class AccountService {
 	public AccountService(AccountDAO accountDao) {
 		this.accountDao = accountDao;
 	}
-	//private static ClientDAO clientDao = new ClientDAO();
 	
 	public Account createAccount(Account a) {
 		Account newAccount = accountDao.createAccount(a);
@@ -32,8 +31,8 @@ public class AccountService {
 		return accountDao.getAccountsInValueRange(clientId, whichType, low, high);
 	}
 	
-	public boolean updateAccount(Account changeAccount) {
-		return accountDao.updateAccount(changeAccount);
+	public boolean updateAccount(int clientId, int accountNumber, int checkingAmount, int savingsAmount) {
+		return accountDao.updateAccount(clientId, accountNumber, checkingAmount, savingsAmount);
 	}
 	
 	public boolean withdraw(int clientId, int accountNumber, String whichType, int amountToWithdraw) {

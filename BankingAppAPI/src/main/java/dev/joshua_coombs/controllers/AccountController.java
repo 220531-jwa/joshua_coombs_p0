@@ -77,11 +77,11 @@ public class AccountController {
 	
 	public static void updateAccount(Context ctx) {
 		int accountNumber = Integer.parseInt(ctx.pathParam("account_number"));
-		int clientId = Integer.parseInt(ctx.pathParam("id")); //maybe change to id
-		Account changeAccount = ctx.bodyAsClass(Account.class);
-		changeAccount.setClientId(clientId);
-		changeAccount.setAccountNumber(accountNumber);
-		boolean updated = accountService.updateAccount(changeAccount);
+		int clientId = Integer.parseInt(ctx.pathParam("id"));
+		AccountDAO ad = new AccountDAO();
+		int checkingAmount = ad.getSpecificAccountByClientId(clientId, accountNumber).getCheckingAmount() + 200;
+		int savingsAmount = ad.getSpecificAccountByClientId(clientId, accountNumber).getSavingsAmount() + 200;
+		boolean updated = accountService.updateAccount(clientId, accountNumber, checkingAmount, savingsAmount);
 		if (!updated) {
 			ctx.status(404);
 		} else {
