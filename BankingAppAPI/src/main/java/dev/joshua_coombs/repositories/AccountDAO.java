@@ -16,7 +16,7 @@ public class AccountDAO {
 	private static ConnectionUtil cu = ConnectionUtil.getConnectionUtil();
 	
 	public Account createAccount (Account a) {
-		String sql = "insert into bankingapp.accounts values (default, ?, ?, ?) returning *";
+		String sql = "insert into bankingapp.accounts values (default, ?, ?, ?) returning *;";
 		try (Connection conn = cu.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, a.getClientId());
@@ -41,7 +41,7 @@ public class AccountDAO {
 				+ " from bankingapp.clients c"
 				+ " left join bankingapp.accounts a"
 				+ " on c.id = a.client_id"
-				+ " where c.id = ?";
+				+ " where c.id = ?;";
 		List<ClientAccountLeftJoin> joined = new ArrayList<>();
 		try (Connection conn = cu.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(sql);
@@ -68,7 +68,7 @@ public class AccountDAO {
 				+ " from bankingapp.clients c"
 				+ " left join bankingapp.accounts a"
 				+ " on c.id = a.client_id"
-				+ " where c.id = ? and a.account_number = ?";
+				+ " where c.id = ? and a.account_number = ?;";
 		ClientAccountLeftJoin joined = null;
 		try (Connection conn = cu.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(sql);
@@ -151,7 +151,7 @@ public class AccountDAO {
 	public boolean updateAccount(Account changeAccount) {
 		String sql = "update bankingapp.accounts set checking = ?, savings = ?"
 				+ " where account_number = ?"
-				+ " and client_id = ?";
+				+ " and client_id = ?;";
 		try (Connection conn = cu.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, changeAccount.getCheckingAmount());
@@ -168,34 +168,121 @@ public class AccountDAO {
 		return false;
 	}
 	
+	//ask if it's necessary to return account
+	public boolean withdraw(int clientId, int accountNumber, String whichType, int amountToWithdraw) {
+		//"/withdraw/{amount_w}"
+		
+		ClientAccountLeftJoin a = getSpecificAccountByClientId(clientId, accountNumber);
+		if (whichType.equals("checking")) {
+			int newAmount = a.getCheckingAmount() - amountToWithdraw;
+			if (newAmount >= 0) {
+				String sql = "update bankingapp.accounts set "
+						+ whichType + " = " + newAmount + "where "
+						+ "account_number = " + accountNumber + " and "
+						+ "client_id = " + clientId + ";";
+				try (Connection conn = cu.getConnection()) {
+					PreparedStatement ps = conn.prepareStatement(sql);
+					int checkWithdrawal = ps.executeUpdate();
+					if (checkWithdrawal != 0) {
+						return true;
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			} else {
+				
+			}
+		} else if (whichType.equals("savings")) {
+			int newAmount = a.getSavingsAmount() - amountToWithdraw;
+			if (newAmount >= 0) {
+				String sql = "update bankingapp.accounts set "
+						+ whichType + " = " + newAmount + "where "
+						+ "account_number = " + accountNumber + " and "
+						+ "client_id = " + clientId + ";";
+				try (Connection conn = cu.getConnection()) {
+					PreparedStatement ps = conn.prepareStatement(sql);
+					int checkWithdrawal = ps.executeUpdate();
+					if (checkWithdrawal != 0) {
+						return true;
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			} else {
+				
+			}
+		}
+		return false;
+	}
+	
+	//ask if it's necessary to return account
+	public boolean deposit(int clientId, int accountNumber, String whichType, int amountToDeposit) {
+		//"/deposit/{amount_d}"
+		ClientAccountLeftJoin a = getSpecificAccountByClientId(clientId, accountNumber);
+		if (whichType.equals("checking")) {
+			int newAmount = a.getCheckingAmount() + amountToDeposit;
+			if (newAmount >= 0) {
+				String sql = "update bankingapp.accounts set "
+						+ whichType + " = " + newAmount + "where "
+						+ "account_number = " + accountNumber + " and "
+						+ "client_id = " + clientId + ";";
+				try (Connection conn = cu.getConnection()) {
+					PreparedStatement ps = conn.prepareStatement(sql);
+					int checkDeposit = ps.executeUpdate();
+					if (checkDeposit != 0) {
+						return true;
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			} else {
+				
+			}
+		} else if (whichType.equals("savings")) {
+			int newAmount = a.getSavingsAmount() + amountToDeposit;
+			if (newAmount >= 0) {
+				String sql = "update bankingapp.accounts set "
+						+ whichType + " = " + newAmount + "where "
+						+ "account_number = " + accountNumber + " and "
+						+ "client_id = " + clientId + ";";
+				try (Connection conn = cu.getConnection()) {
+					PreparedStatement ps = conn.prepareStatement(sql);
+					int checkDeposit = ps.executeUpdate();
+					if (checkDeposit != 0) {
+						return true;
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			} else {
+				
+			}
+		}
+		return false;
+	}
+
+	public boolean transfer(int clientId, int fromAccount, int toAccount, 
+			String fromWhichType, String toWhichType, int amount) {
+		//"/{which_type_tf}/transfer/{other_account}/{which_type_tt}/{amount_t}"
+		//String sql = "";
+		return false;
+	}
+	
 	//not sure yet
 	public boolean deleteAccount(int clientId, int accountNumber) {
 		String sql = "delete from bankingapp.accounts where account_number = ? "
-				+ "client_id = ?";
-		boolean deletedAccount = false;
+				+ "and client_id = ?;";
 		try (Connection conn = cu.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, accountNumber);
 			ps.setInt(2, clientId);
 			int ifDeleted = ps.executeUpdate();
 			if (ifDeleted != 0) {
-				deletedAccount = true;
+				return true;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return deletedAccount;
-	}
-	
-	public void withdraw() {
-		//String sql = "";
-	}
-	
-	public void deposit() {
-		//String sql = "";
-	}
-	
-	public void transfer() {
-		//String sql = "";
+		return false;
 	}
 }

@@ -36,6 +36,20 @@ public class AccountService {
 		return accountDao.updateAccount(changeAccount);
 	}
 	
+	public boolean withdraw(int clientId, int accountNumber, String whichType, int amountToWithdraw) {
+		return accountDao.withdraw(clientId, accountNumber, whichType, amountToWithdraw);
+	}
+	
+	public boolean deposit(int clientId, int accountNumber, String whichType, int amountToDeposit) {
+		return accountDao.deposit(clientId, accountNumber, whichType, amountToDeposit);
+	}
+	
+	public boolean transfer(int clientId, int fromAccount, int toAccount, 
+			String fromWhichType, String toWhichType, int amount) {
+		return accountDao.transfer(clientId, fromAccount, toAccount, 
+			fromWhichType, toWhichType, amount);
+	}
+	
 	public boolean deleteAccount(int clientId, int accountNumber) {
 		return accountDao.deleteAccount(clientId, accountNumber);
 	}

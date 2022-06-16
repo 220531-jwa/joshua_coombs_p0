@@ -77,7 +77,7 @@ public class AccountController {
 	
 	public static void updateAccount(Context ctx) {
 		int accountNumber = Integer.parseInt(ctx.pathParam("account_number"));
-		int clientId = Integer.parseInt(ctx.pathParam("client_id")); //maybe change to id
+		int clientId = Integer.parseInt(ctx.pathParam("id")); //maybe change to id
 		Account changeAccount = ctx.bodyAsClass(Account.class);
 		changeAccount.setClientId(clientId);
 		changeAccount.setAccountNumber(accountNumber);
@@ -88,26 +88,57 @@ public class AccountController {
 			ctx.status(200);
 		}
 	}
+
+	public static void withdraw(Context ctx) {
+		int accountNumber = Integer.parseInt(ctx.pathParam("account_number"));
+		int clientId = Integer.parseInt(ctx.pathParam("id"));
+		String whichType = ctx.pathParam("which_type_dw");
+		int amountToWithdraw = Integer.parseInt(ctx.pathParam("amount_w"));
+		boolean withdrawn = accountService.withdraw(clientId, accountNumber, whichType, amountToWithdraw);
+		try {
+			ClientAccountLeftJoin a = accountService.getSpecificAccountByClientId(clientId, accountNumber);
+			if (!withdrawn) {
+				ctx.status(404);
+			} else {
+				ctx.status(200);
+				ctx.json(a);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void deposit(Context ctx) {
+		int accountNumber = Integer.parseInt(ctx.pathParam("account_number"));
+		int clientId = Integer.parseInt(ctx.pathParam("id"));
+		String whichType = ctx.pathParam("which_type_dw");
+		int amountToDeposit = Integer.parseInt(ctx.pathParam("amount_d"));
+		boolean deposited = accountService.deposit(clientId, accountNumber, whichType, amountToDeposit);
+		try {
+			ClientAccountLeftJoin a = accountService.getSpecificAccountByClientId(clientId, accountNumber);
+			if (!deposited) {
+				ctx.status(404);
+			} else {
+				ctx.status(200);
+				ctx.json(a);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void transfer(Context ctx) {
+		
+	}
+	
 	public static void deleteAccount(Context ctx) {
 		int accountNumber = Integer.parseInt(ctx.pathParam("account_number"));
-		int clientId = Integer.parseInt(ctx.pathParam("client_id"));
+		int clientId = Integer.parseInt(ctx.pathParam("id"));
 		boolean deletedAccount = accountService.deleteAccount(clientId, accountNumber);
 		if (!deletedAccount) {
 			ctx.status(404);
 		} else {
 			ctx.status(205);
 		}
-	}
-	
-	public static void withdrawFromAccount(Context ctx) {
-		
-	}
-	
-	public static void depositIntoAccount(Context ctx) {
-		
-	}
-	
-	public static void transferFunds(Context ctx) {
-		
 	}
 }

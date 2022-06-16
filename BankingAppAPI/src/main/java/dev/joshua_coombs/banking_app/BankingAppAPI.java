@@ -25,18 +25,23 @@ public class BankingAppAPI {
 						post(AccountController::createAccount); //works
 						get(AccountController::getAllAccountsByClientId); //works
 						path("/{which_type}", () -> {
-							get(AccountController::getAccountsInValueRange);
+							get(AccountController::getAccountsInValueRange); //works
+							
 						});
 						path("/{account_number}", () -> {
 							get(AccountController::getSpecificAccountByClientId); //works
 							put(AccountController::updateAccount); //doesn't work
-							//update account with the id 3 for client 10 return 404 if no account or client exists
-							delete(AccountController::deleteAccount); //not sure yet
-								//delete account 6 for client 15 return 404 if no account or client exists
-							//patch(AccountController::withdrawFromAccount); //need to implement
-							//patch(AccountController::depositIntoAccount); //need to implement
-							path("/transfer/{other_account}", () -> {
-								//patch(AccountController::transferFunds); //need to implement
+							delete(AccountController::deleteAccount); //works
+							path("/{which_type_dw}", () -> {
+								path("/deposit/{amount_d}", () -> {
+									patch(AccountController::deposit); //works
+								});
+								path("/withdraw/{amount_w}", () -> {
+									patch(AccountController::withdraw); //works
+								});
+							});
+							path("/{which_type_tf}/transfer/{other_account}/{which_type_tt}/{amount_t}", () -> {
+								//patch(AccountController::transfer); //need to implement
 							});
 						});
 					});
