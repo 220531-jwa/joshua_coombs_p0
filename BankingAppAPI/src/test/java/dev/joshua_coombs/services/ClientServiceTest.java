@@ -23,5 +23,53 @@ public class ClientServiceTest {
 		mockClientDao = mock(ClientDAO.class);
 	}
 	
+	@Test
+	private static void createClientPositiveTest() {
+		
+	}
 	
+	@Test
+	private static void createClientNegativeTest() {
+		
+	}
+	
+	@Test
+	private static void getAllClientsPositiveTest() {
+		
+	}
+	
+	@Test
+	private static void getAllClientsNegativeTest() {
+		
+	}
+	
+	@Test
+	private static void getClientByIdPositiveTest() {
+		
+	}
+	
+	@Test
+	private static void getClientByIdNegativeTest() {
+		
+	}
+	
+	@Test
+	private static void updateClientPositiveTest() {
+		
+	}
+	
+	@Test
+	private static void updateClientNegativeTest() {
+		
+	}
+	
+	@Test
+	private static void deleteClientByIdPositiveTest() {
+		
+	}
+	
+	@Test
+	private static void deleteClientByIdNegativeTest() {
+		
+	}
 }
