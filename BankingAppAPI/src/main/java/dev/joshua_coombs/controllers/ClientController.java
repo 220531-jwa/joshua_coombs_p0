@@ -1,3 +1,11 @@
+/**
+ * This ClientController handles methods defined within ClientService. The methods
+ * of this class are accessed by the main method of the BankingAppAPI class
+ * 
+ * @author joshuacoombs
+ * @version 1.0
+ */
+
 package dev.joshua_coombs.controllers;
 
 import java.util.List;
@@ -11,6 +19,10 @@ public class ClientController {
 	private static ClientService clientService = new ClientService(new ClientDAO());
 	private static List<Client> clients = clientService.getAllClients();
 	
+	/**
+	 * This method creates a client within the clients table of the database
+	 * @param ctx
+	 */
 	public static void createClient(Context ctx) {
 		Client clientFromRequestBody = ctx.bodyAsClass(Client.class);
 		Client c = clientService.createClient(clientFromRequestBody);
@@ -23,6 +35,11 @@ public class ClientController {
 		}
 	}
 	
+	/**
+	 * This method gets all of the clients in the clients table of the
+	 * database
+	 * @param ctx
+	 */
 	public static void getAllClients(Context ctx) {
 		if (clients.size() > 0) {
 			ctx.status(200);
@@ -32,6 +49,11 @@ public class ClientController {
 		}
 	}
 	
+	/**
+	 * This method gets a specific client by their id with the clients table 
+	 * of the database
+	 * @param ctx
+	 */
 	public static void getClientById(Context ctx) {
 		int id = Integer.parseInt(ctx.pathParam("id"));
 		Client c = null;
@@ -44,6 +66,11 @@ public class ClientController {
 		ctx.json(c);
 	}
 	
+	/**
+	 * This method deletes a specific client by their id from the clients 
+	 * table within the database
+	 * @param ctx
+	 */
 	public static void deleteClientById(Context ctx) {
         int id = Integer.parseInt(ctx.pathParam("id"));
         boolean deletedClient = clientService.deleteClientById(id);
@@ -54,6 +81,11 @@ public class ClientController {
         }
     }
 	
+	/**
+	 * This method updates a specific client by their id from the clients 
+	 * table within the database
+	 * @param ctx
+	 */
 	public static void updateClientById(Context ctx) {
 		int id = Integer.parseInt(ctx.pathParam("id"));
 		Client changeClient = ctx.bodyAsClass(Client.class);

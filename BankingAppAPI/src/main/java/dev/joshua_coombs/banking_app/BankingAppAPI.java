@@ -1,6 +1,11 @@
-package dev.joshua_coombs.banking_app;
+/**
+ * This BankingAppAPI performs what the README.md file specifies
+ * 
+ * @author joshuacoombs
+ * @version 1.0
+ */
 
-//import java.util.List;
+package dev.joshua_coombs.banking_app;
 
 import dev.joshua_coombs.controllers.AccountController;
 import dev.joshua_coombs.controllers.ClientController;
