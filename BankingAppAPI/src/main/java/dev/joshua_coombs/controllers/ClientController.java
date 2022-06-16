@@ -3,7 +3,7 @@
  * class. The methods  of this class are accessed by the main method of the 
  * BankingAppAPI class
  * 
- * @author joshuacoombs
+ * @author joshua_coombs
  * @version 1.0
  */
 
@@ -12,12 +12,11 @@ package dev.joshua_coombs.controllers;
 import java.util.List;
 
 import dev.joshua_coombs.models.Client;
-import dev.joshua_coombs.repositories.ClientDAO;
 import dev.joshua_coombs.services.ClientService;
 import io.javalin.http.Context;
 
 public class ClientController {
-	private static ClientService clientService = new ClientService(new ClientDAO());
+	private static ClientService clientService = new ClientService();
 	private static List<Client> clients = clientService.getAllClients();
 	
 	/**
@@ -78,9 +77,7 @@ public class ClientController {
 	 */
 	public static void updateClientById(Context ctx) {
 		int id = Integer.parseInt(ctx.pathParam("id"));
-		Client changeClient = ctx.bodyAsClass(Client.class);
-		changeClient.setID(id);
-		boolean updated = clientService.updateClient(changeClient);
+		boolean updated = clientService.updateClient(id);
 		if (!updated) {
 			ctx.status(404);
 		} else {

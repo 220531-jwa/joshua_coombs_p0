@@ -16,14 +16,13 @@ import dev.joshua_coombs.models.AlternateCALeftJoin;
 import dev.joshua_coombs.models.Client;
 import dev.joshua_coombs.models.ClientAccountLeftJoin;
 import dev.joshua_coombs.repositories.AccountDAO;
-import dev.joshua_coombs.repositories.ClientDAO;
 import dev.joshua_coombs.services.AccountService;
 import dev.joshua_coombs.services.ClientService;
 import io.javalin.http.Context;
 
 public class AccountController {
-	private static AccountService accountService = new AccountService(new AccountDAO());
-	private static ClientService clientService = new ClientService(new ClientDAO());
+	private static AccountService accountService = new AccountService();
+	private static ClientService clientService = new ClientService();
 	
 	/**
 	 * This method creates an account within the accounts table of

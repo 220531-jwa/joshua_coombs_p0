@@ -17,11 +17,13 @@ import dev.joshua_coombs.models.ClientAccountLeftJoin;
 import dev.joshua_coombs.repositories.AccountDAO;
 
 public class AccountService {
-	private static AccountDAO accountDao;
+	private static AccountDAO accountDao = new AccountDAO();
 	
+	/*
 	public AccountService(AccountDAO accountDao) {
 		this.accountDao = accountDao;
 	}
+	*/
 	
 	/**
 	 * This method creates an account within the accounts table of

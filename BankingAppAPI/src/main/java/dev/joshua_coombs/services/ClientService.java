@@ -14,11 +14,13 @@ import dev.joshua_coombs.models.Client;
 import dev.joshua_coombs.repositories.ClientDAO;
 
 public class ClientService {
-	private static ClientDAO clientDao;
+	private static ClientDAO clientDao = new ClientDAO();
 	
+	/*
 	public ClientService(ClientDAO clientDao) {
 		this.clientDao = clientDao;
 	}
+	*/
 	
 	/**
 	 * This method creates a client within the clients table of the database
@@ -60,8 +62,8 @@ public class ClientService {
 	 * @param changedClient
 	 * @return
 	 */
-	public boolean updateClient(Client changedClient) {
-		return clientDao.updateClientById(changedClient);
+	public boolean updateClient(int id) {
+		return clientDao.updateClientById(id);
 	}
 
 	/**

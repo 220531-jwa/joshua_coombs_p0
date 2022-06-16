@@ -17,12 +17,6 @@ public class AccountServiceTest {
 	@Mock
 	private static AccountDAO mockAccountDao;
 	
-	@BeforeAll
-	public static void setUp() {
-		accountService = new AccountService(mockAccountDao);
-		mockAccountDao = mock(AccountDAO.class);
-	}
-	
 	@Test
 	public static void createAccountPositiveTest() {
 		

@@ -105,14 +105,14 @@ public class ClientDAO {
 	 * @param changeClient
 	 * @return
 	 */
-	public boolean updateClientById (Client changeClient) {
+	public boolean updateClientById(int id) {
 		String sql = "update bankingapp.clients set (first_name, last_name)"
 				+ " = (?, ?) where id = ?";
 		try (Connection conn = cu.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setString(1, changeClient.getFirstName());
-			ps.setString(2, changeClient.getLastName());
-			ps.setInt(3, changeClient.getId());
+			ps.setString(1, "new");
+			ps.setString(2, "name");
+			ps.setInt(3, id);
 			int updated = ps.executeUpdate();
 			if (updated != 0) {
 				return true;
@@ -132,17 +132,16 @@ public class ClientDAO {
 	 */
 	public boolean deleteClientById(int id) {
 		String sql = "delete from bankingapp.clients where id = ?";
-		boolean deletedClient = false;
 		try (Connection conn = cu.getConnection()) {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, id);
 			int ifDeleted = ps.executeUpdate();
 			if (ifDeleted != 0) {
-				deletedClient = true;
+				return true;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return deletedClient;
+		return false;
 	}
 }
