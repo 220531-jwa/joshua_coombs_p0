@@ -30,7 +30,7 @@ public class BankingAppAPI {
 						});
 						path("/{account_number}", () -> {
 							get(AccountController::getSpecificAccountByClientId); //works
-							put(AccountController::updateAccount); //doesn't work
+							put(AccountController::updateAccount); //doesn't work yet
 							delete(AccountController::deleteAccount); //works
 							path("/{which_type_dw}", () -> {
 								path("/deposit/{amount_d}", () -> {
@@ -40,8 +40,8 @@ public class BankingAppAPI {
 									patch(AccountController::withdraw); //works
 								});
 							});
-							path("/{which_type_tf}/transfer/{other_account}/{which_type_tt}/{amount_t}", () -> {
-								//patch(AccountController::transfer); //need to implement
+							path("/{which_type_tf}/transfer/{other_account}/{which_type_tt}/{amount_one}/{amount_two}", () -> {
+								patch(AccountController::transfer); //doesn't work yet
 							});
 						});
 					});

@@ -189,8 +189,6 @@ public class AccountDAO {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-			} else {
-				
 			}
 		} else if (whichType.equals("savings")) {
 			int newAmount = a.getSavingsAmount() - amountToWithdraw;
@@ -208,8 +206,6 @@ public class AccountDAO {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-			} else {
-				
 			}
 		}
 		return false;
@@ -235,8 +231,6 @@ public class AccountDAO {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-			} else {
-				
 			}
 		} else if (whichType.equals("savings")) {
 			int newAmount = a.getSavingsAmount() + amountToDeposit;
@@ -254,8 +248,6 @@ public class AccountDAO {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-			} else {
-				
 			}
 		}
 		return false;
@@ -264,7 +256,36 @@ public class AccountDAO {
 	public boolean transfer(int clientId, int fromAccount, int toAccount, 
 			String fromWhichType, String toWhichType, int amount) {
 		//"/{which_type_tf}/transfer/{other_account}/{which_type_tt}/{amount_t}"
-		//String sql = "";
+		AccountDAO ad = new AccountDAO();
+		int amountOne = 0;
+		int amountTwo = 0;
+		if (fromWhichType.equals("checking")) {
+			amountOne = ad.getSpecificAccountByClientId(clientId, fromAccount).getCheckingAmount() - amount;
+		} else if (fromWhichType.equals("savings")) {
+			amountOne = ad.getSpecificAccountByClientId(clientId, fromAccount).getSavingsAmount() - amount;
+		}
+		
+		if (fromWhichType.equals("checking")) {
+			amountTwo = ad.getSpecificAccountByClientId(clientId, toAccount).getCheckingAmount() + amount;
+		} else if (fromWhichType.equals("savings")) {
+			amountTwo = ad.getSpecificAccountByClientId(clientId, toAccount).getSavingsAmount() + amount;
+		}
+		String sql = "update bankingapp.accounts set " + fromWhichType + " = ?"
+				+ " where account_number = " + fromAccount + " and "
+				+ "client_id = " + clientId + "; update bankingapp.accounts set "
+				+ toWhichType + " = ?" + " where account_number = "
+				+ toAccount + " and client_id = " + clientId + ";";
+		try (Connection conn = cu.getConnection()) {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, amountOne);
+			ps.setInt(2, amountTwo);
+			int checkTransfer = ps.executeUpdate();
+			if (checkTransfer != 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 	

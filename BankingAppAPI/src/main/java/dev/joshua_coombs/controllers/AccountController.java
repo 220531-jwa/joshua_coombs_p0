@@ -96,12 +96,18 @@ public class AccountController {
 		int amountToWithdraw = Integer.parseInt(ctx.pathParam("amount_w"));
 		boolean withdrawn = accountService.withdraw(clientId, accountNumber, whichType, amountToWithdraw);
 		try {
-			ClientAccountLeftJoin a = accountService.getSpecificAccountByClientId(clientId, accountNumber);
+			ClientAccountLeftJoin aBefore = accountService.getSpecificAccountByClientId(clientId, accountNumber);
+			ctx.json(aBefore);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		try {
+			ClientAccountLeftJoin aAfter = accountService.getSpecificAccountByClientId(clientId, accountNumber);
 			if (!withdrawn) {
-				ctx.status(404);
+				ctx.status(422);
 			} else {
 				ctx.status(200);
-				ctx.json(a);
+				ctx.json(aAfter);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -115,12 +121,18 @@ public class AccountController {
 		int amountToDeposit = Integer.parseInt(ctx.pathParam("amount_d"));
 		boolean deposited = accountService.deposit(clientId, accountNumber, whichType, amountToDeposit);
 		try {
-			ClientAccountLeftJoin a = accountService.getSpecificAccountByClientId(clientId, accountNumber);
+			ClientAccountLeftJoin aBefore = accountService.getSpecificAccountByClientId(clientId, accountNumber);
+			ctx.json(aBefore);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		try {
+			ClientAccountLeftJoin aAfter = accountService.getSpecificAccountByClientId(clientId, accountNumber);
 			if (!deposited) {
-				ctx.status(404);
+				ctx.status(422);
 			} else {
 				ctx.status(200);
-				ctx.json(a);
+				ctx.json(aAfter);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -128,7 +140,35 @@ public class AccountController {
 	}
 
 	public static void transfer(Context ctx) {
+		int fromAccount = Integer.parseInt(ctx.pathParam("account_number"));
+		int toAccount = Integer.parseInt(ctx.pathParam("other_account"));
+		int clientId = Integer.parseInt(ctx.pathParam("id"));
+		String fromWhichType = ctx.pathParam("which_type_tf");
+		String toWhichType = ctx.pathParam("which_type_tt");
+		int amount = Integer.parseInt(ctx.pathParam("amount"));
+		try {
+			ClientAccountLeftJoin aFromBefore = accountService.getSpecificAccountByClientId(clientId, fromAccount);
+			ClientAccountLeftJoin aToBefore = accountService.getSpecificAccountByClientId(clientId, toAccount);
+			ctx.json(aFromBefore);
+			ctx.json(aToBefore);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		
+		boolean transferred = accountService.transfer(clientId, fromAccount, toAccount, fromWhichType, toWhichType, amount);
+		try {
+			ClientAccountLeftJoin aFromAfter = accountService.getSpecificAccountByClientId(clientId, fromAccount);
+			ClientAccountLeftJoin aToAfter = accountService.getSpecificAccountByClientId(clientId, toAccount);
+			if (!transferred) {
+				ctx.status(422);
+			} else {
+				ctx.status(200);
+				ctx.json(aFromAfter);
+				ctx.json(aToAfter);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void deleteAccount(Context ctx) {
