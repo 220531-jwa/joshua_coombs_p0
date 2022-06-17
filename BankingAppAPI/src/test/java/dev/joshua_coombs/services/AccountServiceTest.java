@@ -26,7 +26,7 @@ public class AccountServiceTest {
 	
 	@Test
 	public static void createAccountPositiveTest() {
-		Account mockAccount = new Account(1, 7, 500, 500);
+		Account mockAccount = new Account(7, 2, 500, 500);
 		assertEquals(when(mockAccountDao.createAccount(mockAccount)).thenReturn(mockAccount), 
 				accountService.createAccount(mockAccount));
 	}
@@ -34,11 +34,11 @@ public class AccountServiceTest {
 	@Test
 	public static void getAllAccountsByClientIdPositiveTest() {
 		List<ClientAccountLeftJoin> mockCA = new ArrayList<>();
-		mockCA.add(new ClientAccountLeftJoin(1, "kurt", "cobain", 1, 200000, 500000));
-		mockCA.add(new ClientAccountLeftJoin(1, "kurt", "cobain", 2, 10000, 2000));
-		mockCA.add(new ClientAccountLeftJoin(1, "kurt", "cobain", 3, 120000, 4000));
-		assertEquals(when(mockAccountDao.getAllAccountsByClientId(1)).thenReturn(mockCA), 
-				accountService.getAllAccountsByClientId(1));
+		mockCA.add(new ClientAccountLeftJoin(3, "edgar", "poe", 3, 200, 200));
+		mockCA.add(new ClientAccountLeftJoin(3, "edgar", "poe", 6, 401, 1999));
+		mockCA.add(new ClientAccountLeftJoin(3, "edgar", "poe", 7, 500, 500));
+		assertEquals(when(mockAccountDao.getAllAccountsByClientId(3)).thenReturn(mockCA), 
+				accountService.getAllAccountsByClientId(3));
 	}
 	
 	@Test
@@ -46,7 +46,7 @@ public class AccountServiceTest {
 		int clientId = 2;
 		int accountNumber = 2;
 		ClientAccountLeftJoin ca = new ClientAccountLeftJoin(
-				clientId, "amahl", "farouk", accountNumber, 20, 20);
+				clientId, "robert", "frost", accountNumber, 200, 7500);
 		assertEquals(when(mockAccountDao.getSpecificAccountByClientId(clientId, accountNumber)).thenReturn(ca), 
 				accountService.getSpecificAccountByClientId(clientId, accountNumber));
 	}
@@ -63,8 +63,8 @@ public class AccountServiceTest {
 	
 	@Test
 	public static void updateAccountPositiveTest() {
-		int clientId = 1;
-		int accountNumber = 1;
+		int clientId = 4;
+		int accountNumber = 4;
 		int checkingAmount = 455;
 		int savingsAmount = 554;
 		assertEquals(when(mockAccountDao.updateAccount(clientId, accountNumber, checkingAmount, savingsAmount)), 
@@ -73,8 +73,8 @@ public class AccountServiceTest {
 	
 	@Test
 	public static void withdrawPositiveTest() {
-		int clientId = 1; 
-		int accountNumber = 1;
+		int clientId = 4; 
+		int accountNumber = 4;
 		String whichType = "checking";
 		int amountToWithdraw = 5;
 		assertEquals(when(mockAccountDao.withdraw(clientId, accountNumber, whichType, amountToWithdraw)), 
@@ -83,8 +83,8 @@ public class AccountServiceTest {
 	
 	@Test
 	public static void depositPositiveTest() {
-		int clientId = 1; 
-		int accountNumber = 1;
+		int clientId = 4; 
+		int accountNumber = 4;
 		String whichType = "checking";
 		int amountToDeposit = 5;
 		assertEquals(when(mockAccountDao.withdraw(clientId, accountNumber, whichType, amountToDeposit)), 
@@ -93,20 +93,20 @@ public class AccountServiceTest {
 	
 	@Test
 	public static void transferPositiveTest() {
-		int clientId = 1;
-		int fromAccount = 1;
-		int toAccount = 2;
+		int clientId = 4;
+		int fromAccount = 4;
+		int toAccount = 5;
 		String fromWhichType = "checking";
 		String toWhichType = "checking";
-		int amount = 50;
+		int amount = 45;
 		assertEquals(when(mockAccountDao.transfer(clientId, fromAccount, toAccount, fromWhichType, toWhichType, amount)), 
 				accountService.transfer(clientId, fromAccount, toAccount, fromWhichType, toWhichType, amount));
 	}
 	
 	@Test
 	public static void deleteAccountPositiveTest() {
-		int clientId = 1;
-		int accountNumber = 1;
+		int clientId = 4;
+		int accountNumber = 9;
 		assertEquals(when(mockAccountDao.deleteAccount(clientId, accountNumber)), 
 				accountService.deleteAccount(clientId, accountNumber));
 	}
