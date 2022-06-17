@@ -26,7 +26,7 @@ public class AccountServiceTest {
 	
 	@Test
 	public static void createAccountPositiveTest() {
-		Account mockAccount = new Account(7, 2, 500, 500);
+		Account mockAccount = new Account(10, 2, 500, 500);
 		assertEquals(when(mockAccountDao.createAccount(mockAccount)).thenReturn(mockAccount), 
 				accountService.createAccount(mockAccount));
 	}
