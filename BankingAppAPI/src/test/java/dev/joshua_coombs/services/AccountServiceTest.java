@@ -13,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import dev.joshua_coombs.models.Account;
-import dev.joshua_coombs.models.AlternateCALeftJoin;
 import dev.joshua_coombs.models.ClientAccountLeftJoin;
 import dev.joshua_coombs.repositories.AccountDAO;
 
